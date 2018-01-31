@@ -18,6 +18,8 @@ namespace Checkers
         Square firstClick = null;
         Square secondClick = null;
         bool blackTurn = true;
+        int redCountersTaken = 0;
+        int blackCountersTaken = 0;
 
         public Form1()
         {
@@ -54,7 +56,7 @@ namespace Checkers
                             squareArray[x, y].setOccupied(true);
                         }
                     }
-                 
+
                     squareArray[x, y].setKing(false);
                     //squareArray[x, y].Text = Convert.ToString((x + 1) + "," + (y + 1));
                     squareArray[x, y].Click += new EventHandler(this.squareEvent_Click);
@@ -104,15 +106,14 @@ namespace Checkers
                 //BLACK'S TURN
                 if (blackTurn)
                 {
-                    Square left = squareArray[square.getX() - 1, square.getY() - 1];
-                    Square right = squareArray[square.getX() + 1, square.getY() - 1];
+                    Square left = squareArray[firstClick.getX() - 1, firstClick.getY() - 1];
+                    Square right = squareArray[firstClick.getX() + 1, firstClick.getY() - 1];
 
                     if (secondClick != left && secondClick != right)
                     {
                         MessageBox.Show("Must be left or right");
                         firstClick = null;
                         secondClick = null;
-                        square.removeCurrent();
                     }
                     else
                     {
@@ -127,6 +128,9 @@ namespace Checkers
                             //secondClick.Text = square.Text;
                             //square.Text = "";
                             secondClick.setOccupied(true);
+                            firstClick.removeCurrent();
+                            firstClick.setOccupied(false);
+                            firstClick.BackgroundImage = Properties.Resources.Greyback;
                             MessageBox.Show("Moved");
                             switchTurn();
                         }
@@ -135,7 +139,7 @@ namespace Checkers
                             MessageBox.Show("Cannot make this move.");
                             firstClick = null;
                             secondClick = null;
-                            square.removeCurrent();
+                            firstClick.removeCurrent();
                         }
                     }
                 }
@@ -143,15 +147,14 @@ namespace Checkers
                 //RED'S TURN
                 else
                 {
-                    Square left = squareArray[square.getX() + 1, square.getY() + 1];
-                    Square right = squareArray[square.getX() - 1, square.getY() + 1];
+                    Square left = squareArray[firstClick.getX() + 1, firstClick.getY() + 1];
+                    Square right = squareArray[firstClick.getX() - 1, firstClick.getY() + 1];
 
                     if (secondClick != left && secondClick != right)
                     {
                         MessageBox.Show("Must be left or right");
                         firstClick = null;
                         secondClick = null;
-                        square.removeCurrent();
                     }
                     else
                     {
@@ -166,6 +169,9 @@ namespace Checkers
                             //secondClick.Text = square.Text;
                             //square.Text = "";
                             secondClick.setOccupied(true);
+                            firstClick.removeCurrent();
+                            firstClick.setOccupied(false);
+                            firstClick.BackgroundImage = Properties.Resources.Greyback;
                             MessageBox.Show("Moved");
                             switchTurn();
                         }
@@ -174,7 +180,7 @@ namespace Checkers
                             MessageBox.Show("Cannot make this move.");
                             firstClick = null;
                             secondClick = null;
-                            square.removeCurrent();
+                            firstClick.removeCurrent();
                         }
                     }
                 }
@@ -182,7 +188,7 @@ namespace Checkers
         }
 
         public bool canBlackMove()
-        {          
+        {
             Square diagonalLeft;
 
             if (firstClick.getX() == 0)
@@ -309,7 +315,7 @@ namespace Checkers
             else
             {
                 diagonalRight = squareArray[firstClick.getX() - 1, firstClick.getY() + 1];
-           
+
                 if (diagonalRight.isOccupied())
                 {
                     if (!diagonalRight.isRed() && diagonalRight.getX() != 0)
@@ -465,118 +471,6 @@ namespace Checkers
                 e.Graphics.DrawPath(pen, GraphPath);
             }
         }*/
-    }
-
-    class Square : Button
-    {
-        bool occupied;
-        bool red;
-        bool king;
-        int x;
-        int y;
-
-        public Square(int one, int two)
-        {
-            x = one;
-            y = two;
-            occupied = true;
-        }
-
-        ~Square()
-        {
-            occupied = false;
-            king = false;
-        }
-
-        public bool isOccupied()
-        {
-            return occupied;
-        }
-
-        public bool isRed()
-        {
-            return red;
-        }
-
-        public bool isKing()
-        {
-            return king;
-        }
-
-        public void setOccupied(bool x)
-        {/*
-            if (x)
-            {
-                if (isRed())
-                {
-                    this.BackgroundImage = Properties.Resources.Red_Checker;
-                }
-                else
-                {
-                    this.BackgroundImage = Properties.Resources.Black_Checker;
-                }
-            }
-            else
-            {
-                this.BackColor = Color.DarkSlateGray;
-                MessageBox.Show("Reached here");
-            }*/
-
-            occupied = x;
-        }
-
-        public void setRed(bool x)
-        {
-            if (x)
-            {
-                this.BackgroundImage = Properties.Resources.Red_Checker;
-            }
-            else
-            {
-                this.BackgroundImage = Properties.Resources.Black_Checker;
-            }
-
-            red = x;
-        }
-
-        public void setKing(bool x)
-        {
-            king = x;
-        }
-
-        public int getX()
-        {
-            return x;
-        }
-
-        public int getY()
-        {
-            return y;
-        }
-
-        public void setCurrent()
-        {
-            if (isRed() && isOccupied())
-            {
-                this.BackgroundImage = Properties.Resources.Red_Checker_Selected;
-            }
-            else if (isRed() && isOccupied())
-            {
-                this.BackgroundImage = Properties.Resources.Black_Checker_Selected;
-            }
-        }
-
-        public void removeCurrent()
-        {
-            if (isRed() && isOccupied())
-            {
-                this.BackgroundImage = Properties.Resources.Red_Checker;
-            }
-            else if (!isRed() && isOccupied())
-            {
-                this.BackgroundImage = Properties.Resources.Black_Checker;
-            }
-        }
     }
 }
 ﻿
