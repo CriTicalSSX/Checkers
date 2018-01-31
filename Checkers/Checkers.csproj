@@ -91,5 +91,17 @@
   <ItemGroup>
     <None Include="Resources\Red Checker.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Left.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Left1.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Redback.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Greyback.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

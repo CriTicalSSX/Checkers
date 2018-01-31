@@ -83,6 +83,16 @@ namespace Checkers.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Greyback {
+            get {
+                object obj = ResourceManager.GetObject("Greyback", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Red_Checker {
             get {
                 object obj = ResourceManager.GetObject("Red_Checker", resourceCulture);
@@ -96,6 +106,16 @@ namespace Checkers.Properties {
         internal static System.Drawing.Bitmap Red_Checker_Selected {
             get {
                 object obj = ResourceManager.GetObject("Red_Checker_Selected", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Redback {
+            get {
+                object obj = ResourceManager.GetObject("Redback", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
