@@ -15,8 +15,7 @@ namespace Checkers
     public partial class Form1 : Form
     {
         Square[,] squareArray = new Square[10, 10];       // Create 2D array of buttons
-        Square firstClick = null;
-        Square secondClick = null;
+        Square firstClick, secondClick, leftCounterToRemove, rightCounterToRemove;
         bool blackTurn = true;
         int redCountersTaken = 0;
         int blackCountersTaken = 0;
@@ -106,7 +105,7 @@ namespace Checkers
                 //BLACK'S TURN
                 if (blackTurn)
                 {
-                    Square left = squareArray[firstClick.getX() - 1, firstClick.getY() - 1];
+                    /*Square left = squareArray[firstClick.getX() - 1, firstClick.getY() - 1];
                     Square right = squareArray[firstClick.getX() + 1, firstClick.getY() - 1];
 
                     if (secondClick != left && secondClick != right)
@@ -114,9 +113,10 @@ namespace Checkers
                         MessageBox.Show("Must be left or right");
                         firstClick = null;
                         secondClick = null;
+                        firstClick.removeCurrent();
                     }
                     else
-                    {
+                    {*/
                         if (canBlackMove())
                         {
                             secondClick.BackgroundImage = Properties.Resources.Black_Checker;
@@ -138,16 +138,15 @@ namespace Checkers
                         {
                             MessageBox.Show("Cannot make this move.");
                             firstClick = null;
-                            secondClick = null;
-                            firstClick.removeCurrent();
+                            secondClick = null;                           
                         }
                     }
-                }
+               // }
 
                 //RED'S TURN
                 else
                 {
-                    Square left = squareArray[firstClick.getX() + 1, firstClick.getY() + 1];
+                    /*Square left = squareArray[firstClick.getX() + 1, firstClick.getY() + 1];
                     Square right = squareArray[firstClick.getX() - 1, firstClick.getY() + 1];
 
                     if (secondClick != left && secondClick != right)
@@ -155,9 +154,10 @@ namespace Checkers
                         MessageBox.Show("Must be left or right");
                         firstClick = null;
                         secondClick = null;
+                        firstClick.removeCurrent();
                     }
                     else
-                    {
+                    {*/
                         if (canRedMove())
                         {
                             secondClick.BackgroundImage = Properties.Resources.Red_Checker;
@@ -180,15 +180,17 @@ namespace Checkers
                             MessageBox.Show("Cannot make this move.");
                             firstClick = null;
                             secondClick = null;
-                            firstClick.removeCurrent();
                         }
-                    }
+                   // }
                 }
             }
         }
 
         public bool canBlackMove()
         {
+            bool leftTaken = false;
+            bool rightTaken = false;
+
             Square diagonalLeft;
 
             if (firstClick.getX() == 0)
@@ -203,7 +205,9 @@ namespace Checkers
                 {
                     if (diagonalLeft.isRed() && diagonalLeft.getX() != 0)
                     {
+                        leftCounterToRemove = diagonalLeft;
                         diagonalLeft = squareArray[diagonalLeft.getX() - 1, diagonalLeft.getY() - 1];
+                        leftTaken = true;
 
                         if (diagonalLeft.isOccupied())
                         {
@@ -231,7 +235,9 @@ namespace Checkers
                 {
                     if (diagonalRight.isRed() && diagonalRight.getX() != 9)
                     {
+                        rightCounterToRemove = diagonalRight;
                         diagonalRight = squareArray[diagonalRight.getX() + 1, diagonalRight.getY() - 1];
+                        rightTaken = true;
 
                         if (diagonalRight.isOccupied())
                         {
@@ -248,7 +254,6 @@ namespace Checkers
             if (diagonalLeft == null && diagonalRight == null)
             {
                 firstClick.removeCurrent();
-                secondClick.removeCurrent();
                 firstClick = null;
                 secondClick = null;
                 return false;
@@ -257,12 +262,30 @@ namespace Checkers
             {
                 if (secondClick == diagonalLeft)
                 {
-                    MessageBox.Show("Second click is diagonalLeft");
+                    MessageBox.Show("Second click is diagonalLeft"); 
+                    
+                    if (leftTaken)
+                    {
+                        leftCounterToRemove.setOccupied(false);
+                        leftCounterToRemove.setKing(false);
+                        leftCounterToRemove.BackgroundImage = Properties.Resources.Greyback;
+                        leftCounterToRemove = null;
+                    }
+
                     return true;
                 }
                 else if (secondClick == diagonalRight)
                 {
                     MessageBox.Show("Second click is diagonalRight");
+
+                    if (rightTaken)
+                    {
+                        rightCounterToRemove.setOccupied(false);
+                        rightCounterToRemove.setKing(false);
+                        rightCounterToRemove.BackgroundImage = Properties.Resources.Greyback;
+                        rightCounterToRemove = null;
+                    }
+
                     return true;
                 }
                 else
@@ -278,6 +301,9 @@ namespace Checkers
 
         public bool canRedMove()
         {
+            bool leftTaken = false;
+            bool rightTaken = false;
+
             Square diagonalLeft;
 
             if (firstClick.getX() == 9)
@@ -292,7 +318,9 @@ namespace Checkers
                 {
                     if (!diagonalLeft.isRed() && diagonalLeft.getX() != 9)
                     {
+                        leftCounterToRemove = diagonalLeft;
                         diagonalLeft = squareArray[diagonalLeft.getX() + 1, diagonalLeft.getY() + 1];
+                        leftTaken = true;
 
                         if (diagonalLeft.isOccupied())
                         {
@@ -320,7 +348,9 @@ namespace Checkers
                 {
                     if (!diagonalRight.isRed() && diagonalRight.getX() != 0)
                     {
+                        rightCounterToRemove = diagonalRight;
                         diagonalRight = squareArray[diagonalRight.getX() - 1, diagonalRight.getY() + 1];
+                        rightTaken = true;
 
                         if (diagonalRight.isOccupied())
                         {
@@ -345,17 +375,33 @@ namespace Checkers
                 if (secondClick == diagonalLeft)
                 {
                     MessageBox.Show("Second click is diagonalLeft");
+
+                    if (leftTaken)
+                    {
+                        leftCounterToRemove.setOccupied(false);
+                        leftCounterToRemove.setKing(false);
+                        leftCounterToRemove.BackgroundImage = Properties.Resources.Greyback;
+                        leftCounterToRemove = null;
+                    }
+
                     return true;
                 }
                 else if (secondClick == diagonalRight)
                 {
                     MessageBox.Show("Second click is diagonalRight");
+
+                    if (rightTaken)
+                    {
+                        rightCounterToRemove.setOccupied(false);
+                        rightCounterToRemove.setKing(false);
+                        rightCounterToRemove.BackgroundImage = Properties.Resources.Greyback;
+                        rightCounterToRemove = null;
+                    }
+
                     return true;
                 }
                 else
                 {
-                    firstClick.removeCurrent();
-                    secondClick.removeCurrent();
                     firstClick = null;
                     secondClick = null;
                     return false;
