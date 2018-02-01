@@ -1,0 +1,20 @@
+C:\Users\samgl\OneDrive\Documents\Schoolwork\Computer Systems 2B\Checkers\Checkers\obj\Debug\Checkers.csprojResolveAssemblyReference.cache
+C:\Users\samgl\OneDrive\Documents\Schoolwork\Computer Systems 2B\Checkers\Checkers\obj\Debug\Checkers.Properties.Resources.resources
+C:\Users\samgl\OneDrive\Documents\Schoolwork\Computer Systems 2B\Checkers\Checkers\obj\Debug\Checkers.csproj.GenerateResource.Cache
+C:\Users\samgl\OneDrive\Documents\Schoolwork\Computer Systems 2B\Checkers\Checkers\obj\Debug\Checkers.csproj.CoreCompileInputs.cache
+C:\Users\samgl\OneDrive\Documents\Schoolwork\Computer Systems 2B\Checkers\Checkers\obj\Debug\Checkers.Form1.resources
+C:\Users\samgl\OneDrive\Documents\Schoolwork\Computer Systems 2B\Checkers\Checkers\bin\Debug\Checkers.exe.config
+C:\Users\samgl\OneDrive\Documents\Schoolwork\Computer Systems 2B\Checkers\Checkers\bin\Debug\Checkers.exe
+C:\Users\samgl\OneDrive\Documents\Schoolwork\Computer Systems 2B\Checkers\Checkers\bin\Debug\Checkers.pdb
+C:\Users\samgl\OneDrive\Documents\Schoolwork\Computer Systems 2B\Checkers\Checkers\obj\Debug\Checkers.exe
+C:\Users\samgl\OneDrive\Documents\Schoolwork\Computer Systems 2B\Checkers\Checkers\obj\Debug\Checkers.pdb
+C:\Users\abbaslawal\Desktop\Thursday\Checkers-master\Checkers\bin\Debug\Checkers.exe.config
+C:\Users\abbaslawal\Desktop\Thursday\Checkers-master\Checkers\bin\Debug\Checkers.exe
+C:\Users\abbaslawal\Desktop\Thursday\Checkers-master\Checkers\bin\Debug\Checkers.pdb
+C:\Users\abbaslawal\Desktop\Thursday\Checkers-master\Checkers\obj\Debug\Checkers.csprojResolveAssemblyReference.cache
+C:\Users\abbaslawal\Desktop\Thursday\Checkers-master\Checkers\obj\Debug\Checkers.Form1.resources
+C:\Users\abbaslawal\Desktop\Thursday\Checkers-master\Checkers\obj\Debug\Checkers.Properties.Resources.resources
+C:\Users\abbaslawal\Desktop\Thursday\Checkers-master\Checkers\obj\Debug\Checkers.csproj.GenerateResource.Cache
+C:\Users\abbaslawal\Desktop\Thursday\Checkers-master\Checkers\obj\Debug\Checkers.csproj.CoreCompileInputs.cache
+C:\Users\abbaslawal\Desktop\Thursday\Checkers-master\Checkers\obj\Debug\Checkers.exe
+C:\Users\abbaslawal\Desktop\Thursday\Checkers-master\Checkers\obj\Debug\Checkers.pdb
