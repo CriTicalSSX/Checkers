@@ -15,10 +15,18 @@ namespace Checkers
     public partial class checkers : Form
     {
         Square[,] squareArray = new Square[10, 10];       // Create 2D array of buttons
-        Square firstClick, secondClick; 
+        Square firstClick, secondClick;
+        Square topLeft;
+        Square topRight;
+        Square bottomLeft;
+        Square bottomRight;
+        Square topLeftToRemove = null;
+        Square topRightToRemove = null;
+        Square bottomLeftToRemove = null;
+        Square bottomRightToRemove = null;
         bool blackTurn = true;
-        int redCountersRemaining = 12;
-        int blackCountersRemaining = 12;
+        int redCountersRemaining = 20;
+        int blackCountersRemaining = 20;
 
         public checkers()
         {
@@ -107,15 +115,14 @@ namespace Checkers
             {
                 secondClick = square;
                 bool moved = false;
-                bool kinged = false;
-                bool nomove = false;
+                bool nomove = false;               
 
                 //BLACK'S TURN
                 if (blackTurn)
                 {
                     if (firstClick.isKing())
                     {
-                        while (canBlackKingMove())
+                        if (canKingMove("black"))
                         {
                             secondClick.BackgroundImage = Properties.Resources.Black_King;
                             square.BackColor = Color.DarkSlateGray;
@@ -129,10 +136,10 @@ namespace Checkers
                             firstClick.removeCurrent();
                             firstClick.setOccupied(false);
                             firstClick.BackgroundImage = Properties.Resources.Greyback;
-
-                            //MessageBox.Show("Moved");
+                           
                             moved = true;
                         }
+
                     }
                     else
                     {
@@ -154,37 +161,15 @@ namespace Checkers
                                // MessageBox.Show("Reached end");
                                 secondClick.setKing(true);
                                 firstClick = null;
-                                secondClick = null;
-                                kinged = true;
-                                moved = true;
+                                secondClick = null;                               
                             }
 
-                            if (kinged == false)
-                            {
-                                //MessageBox.Show("Moved");
-                                moved = true;
-
-                                while (canBlackKingMove())
-                                {
-                                    secondClick.BackgroundImage = Properties.Resources.Black_King;
-                                    square.BackColor = Color.DarkSlateGray;
-                                    secondClick.setKing(square.isKing());
-                                    secondClick.setRed(false);
-                                    square.setOccupied(false);
-                                    square.setKing(false);
-                                    secondClick.setOccupied(true);
-                                    secondClick.setKing(true);
-                                    firstClick.setKing(false);
-                                    firstClick.removeCurrent();
-                                    firstClick.setOccupied(false);
-                                    firstClick.BackgroundImage = Properties.Resources.Greyback;
-
-                                    //MessageBox.Show("Moved");
-                                }
-                            }
+                            moved = true;
                         }
                         else
                         {
+                            firstClick = null;
+                            secondClick = null;
                             nomove = true;
                         }
                     }
@@ -193,7 +178,7 @@ namespace Checkers
                     {
                         MessageBox.Show("Cannot make this move.");
                     }
-
+                    
                     firstClick = null;
                     secondClick = null;
 
@@ -208,7 +193,7 @@ namespace Checkers
                 {
                     if (firstClick.isKing())
                     {
-                        while (canRedKingMove())
+                        if (canKingMove("red"))
                         {
                             secondClick.BackgroundImage = Properties.Resources.Red_King;
                             square.BackColor = Color.DarkSlateGray;
@@ -246,40 +231,10 @@ namespace Checkers
                             {
                                 secondClick.setKing(true);
                                 firstClick = null;
-                                secondClick = null;
-                                kinged = true;
-                                moved = true;
+                                secondClick = null;                             
                             }
 
-
-                            if (kinged == false)
-                            {
-                                //MessageBox.Show("Moved");
-                                moved = true;
-
-                                while (canRedKingMove())
-                                {
-                                    secondClick.BackgroundImage = Properties.Resources.Red_King;
-                                    square.BackColor = Color.DarkSlateGray;
-                                    secondClick.setKing(square.isKing());
-                                    secondClick.setRed(true);
-                                    square.setOccupied(false);
-                                    square.setKing(false);
-                                    secondClick.setOccupied(true);
-                                    secondClick.setKing(true);
-                                    firstClick.setKing(false);
-                                    firstClick.removeCurrent();
-                                    firstClick.setOccupied(false);
-                                    firstClick.BackgroundImage = Properties.Resources.Greyback;
-
-                                    if (secondClick.getY() == 9)
-                                    {
-                                        secondClick.setKing(true);
-                                    }
-
-                                    //MessageBox.Show("Moved");
-                                }
-                            }
+                            moved = true;
                         }
                         else
                         {
@@ -391,6 +346,11 @@ namespace Checkers
                         leftCounterToRemove = null;
                         redCountersRemaining--;
                         Redtakencounter.Text = Convert.ToString(redCountersRemaining);
+
+                        if (redCountersRemaining == 0)
+                        {
+                            winner("Red");
+                        }
                     }
 
                     return true;
@@ -407,6 +367,11 @@ namespace Checkers
                         rightCounterToRemove = null;
                         redCountersRemaining--;
                         Redtakencounter.Text = Convert.ToString(redCountersRemaining);
+
+                        if (redCountersRemaining == 0)
+                        {
+                            winner("Red");
+                        }
                     }
 
                     return true;
@@ -509,6 +474,11 @@ namespace Checkers
                         leftCounterToRemove = null;
                         blackCountersRemaining--;
                         Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
+
+                        if (blackCountersRemaining == 0)
+                        {
+                            winner("Black");
+                        }
                     }
 
                     return true;
@@ -525,6 +495,11 @@ namespace Checkers
                         rightCounterToRemove = null;
                         blackCountersRemaining--;
                         Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
+
+                        if (blackCountersRemaining == 0)
+                        {
+                            winner("Black");
+                        }
                     }
 
                     return true;
@@ -540,18 +515,12 @@ namespace Checkers
             }
         }
 
-        public bool canBlackKingMove()
+        public bool canKingMove(string colour)
         {
             bool topLeftTaken = false;
             bool topRightTaken = false;
             bool bottomLeftTaken = false;
             bool bottomRightTaken = false;
-            Square topLeftToRemove = null;
-            Square topRightToRemove = null;
-            Square bottomLeftToRemove = null;
-            Square bottomRightToRemove = null;
-
-            Square topLeft;
 
             if (firstClick.getX() == 0 || firstClick.getY() == 0)
             {
@@ -563,7 +532,18 @@ namespace Checkers
 
                 if (topLeft.isOccupied())
                 {
-                    if (topLeft.isRed() && topLeft.getX() != 0 && topLeft.getY() != 0)
+                    if (topLeft.isRed() && topLeft.getX() != 0 && topLeft.getY() != 0 && colour == "black")
+                    {
+                        topLeftToRemove = topLeft;
+                        topLeft = squareArray[topLeft.getX() - 1, topLeft.getY() - 1];
+                        topLeftTaken = true;
+
+                        if (topLeft.isOccupied())
+                        {
+                            topLeft = null;
+                        }
+                    }
+                    else if (!topLeft.isRed() && topLeft.getX() != 0 && topLeft.getY() != 0 && colour == "red")
                     {
                         topLeftToRemove = topLeft;
                         topLeft = squareArray[topLeft.getX() - 1, topLeft.getY() - 1];
@@ -581,8 +561,6 @@ namespace Checkers
                 }
             }
 
-            Square topRight;
-
             if (firstClick.getX() == 9 || firstClick.getY() == 0)
             {
                 topRight = null;
@@ -593,7 +571,18 @@ namespace Checkers
 
                 if (topRight.isOccupied())
                 {
-                    if (topRight.isRed() && topRight.getX() != 9 && topRight.getY() != 0)
+                    if (topRight.isRed() && topRight.getX() != 9 && topRight.getY() != 0 && colour == "black")
+                    {
+                        topRightToRemove = topRight;
+                        topRight = squareArray[topRight.getX() + 1, topRight.getY() - 1];
+                        topRightTaken = true;
+
+                        if (topRight.isOccupied())
+                        {
+                            topRight = null;
+                        }
+                    }
+                    else if (!topRight.isRed() && topRight.getX() != 9 && topRight.getY() != 0 && colour == "red")
                     {
                         topRightToRemove = topRight;
                         topRight = squareArray[topRight.getX() + 1, topRight.getY() - 1];
@@ -611,8 +600,6 @@ namespace Checkers
                 }
             }
 
-            Square bottomLeft;
-
             if (firstClick.getX() == 0 || firstClick.getY() == 9)
             {
                 bottomLeft = null;
@@ -623,7 +610,18 @@ namespace Checkers
 
                 if (bottomLeft.isOccupied())
                 {
-                    if (bottomLeft.isRed() && bottomLeft.getX() != 0 && bottomLeft.getY() != 9)
+                    if (bottomLeft.isRed() && bottomLeft.getX() != 0 && bottomLeft.getY() != 9 && colour == "black")
+                    {
+                        bottomLeftToRemove = bottomLeft;
+                        bottomLeft = squareArray[bottomLeft.getX() - 1, bottomLeft.getY() + 1];
+                        bottomLeftTaken = true;
+
+                        if (bottomLeft.isOccupied())
+                        {
+                            bottomLeft = null;
+                        }
+                    }
+                    else if (!bottomLeft.isRed() && bottomLeft.getX() != 0 && bottomLeft.getY() != 9 && colour == "red")
                     {
                         bottomLeftToRemove = bottomLeft;
                         bottomLeft = squareArray[bottomLeft.getX() - 1, bottomLeft.getY() + 1];
@@ -641,8 +639,6 @@ namespace Checkers
                 }
             }
 
-            Square bottomRight;
-
             if (firstClick.getX() == 9 || firstClick.getY() == 9)
             {
                 bottomRight = null;
@@ -653,7 +649,18 @@ namespace Checkers
 
                 if (bottomRight.isOccupied())
                 {
-                    if (bottomRight.isRed() && bottomRight.getX() != 9 && bottomRight.getY() != 9)
+                    if (bottomRight.isRed() && bottomRight.getX() != 9 && bottomRight.getY() != 9 && colour == "black")
+                    {
+                        bottomRightToRemove = bottomRight;
+                        bottomRight = squareArray[bottomRight.getX() + 1, bottomRight.getY() + 1];
+                        bottomRightTaken = true;
+
+                        if (bottomRight.isOccupied())
+                        {
+                            bottomRight = null;
+                        }
+                    }
+                    else if (!bottomRight.isRed() && bottomRight.getX() != 9 && bottomRight.getY() != 9 && colour == "red")
                     {
                         bottomRightToRemove = bottomRight;
                         bottomRight = squareArray[bottomRight.getX() + 1, bottomRight.getY() + 1];
@@ -689,15 +696,33 @@ namespace Checkers
                         topLeftToRemove.setKing(false);
                         topLeftToRemove.BackgroundImage = Properties.Resources.Greyback;
                         topLeftToRemove = null;
-                        redCountersRemaining--;
-                        Redtakencounter.Text = Convert.ToString(redCountersRemaining);
+
+                        if (colour == "black")
+                        {
+                            redCountersRemaining--;
+                            Redtakencounter.Text = Convert.ToString(redCountersRemaining);
+                        }
+                        else
+                        {
+                            blackCountersRemaining--;
+                            Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
+                        }
+
+                        if (redCountersRemaining == 0)
+                        {
+                            winner("Red");
+                        }
+                        else if (blackCountersRemaining == 0)
+                        {
+                            winner("Black");
+                        }
                     }
 
                     return true;
                 }
                 else if (secondClick == topRight)
                 {
-                    MessageBox.Show("Second click is topRight");
+                    //MessageBox.Show("Second click is topRight");
 
                     if (topRightTaken)
                     {
@@ -705,15 +730,33 @@ namespace Checkers
                         topRightToRemove.setKing(false);
                         topRightToRemove.BackgroundImage = Properties.Resources.Greyback;
                         topRightToRemove = null;
-                        redCountersRemaining--;
-                        Redtakencounter.Text = Convert.ToString(redCountersRemaining);
+
+                        if (colour == "black")
+                        {
+                            redCountersRemaining--;
+                            Redtakencounter.Text = Convert.ToString(redCountersRemaining);
+                        }
+                        else
+                        {
+                            blackCountersRemaining--;
+                            Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
+                        }
+
+                        if (redCountersRemaining == 0)
+                        {
+                            winner("Red");
+                        }
+                        else if (blackCountersRemaining == 0)
+                        {
+                            winner("Black");
+                        }
                     }
 
                     return true;
                 }
                 else if (secondClick == bottomLeft)
                 {
-                    MessageBox.Show("Second click is bottomLeft");
+                    //MessageBox.Show("Second click is bottomLeft");
 
                     if (bottomLeftTaken)
                     {
@@ -721,15 +764,33 @@ namespace Checkers
                         bottomLeftToRemove.setKing(false);
                         bottomLeftToRemove.BackgroundImage = Properties.Resources.Greyback;
                         bottomLeftToRemove = null;
-                        redCountersRemaining--;
-                        Redtakencounter.Text = Convert.ToString(redCountersRemaining);
+
+                        if (colour == "black")
+                        {
+                            redCountersRemaining--;
+                            Redtakencounter.Text = Convert.ToString(redCountersRemaining);
+                        }
+                        else
+                        {
+                            blackCountersRemaining--;
+                            Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
+                        }
+
+                        if (redCountersRemaining == 0)
+                        {
+                            winner("Red");
+                        }
+                        else if (blackCountersRemaining == 0)
+                        {
+                            winner("Black");
+                        }
                     }
 
                     return true;
                 }
                 else if (secondClick == bottomRight)
                 {
-                    MessageBox.Show("Second click is bottomRight");
+                    //MessageBox.Show("Second click is bottomRight");
 
                     if (bottomRightTaken)
                     {
@@ -737,232 +798,36 @@ namespace Checkers
                         bottomRightToRemove.setKing(false);
                         bottomRightToRemove.BackgroundImage = Properties.Resources.Greyback;
                         bottomRightToRemove = null;
-                        redCountersRemaining--;
-                        Redtakencounter.Text = Convert.ToString(redCountersRemaining);
+
+                        if (colour == "black")
+                        {
+                            redCountersRemaining--;
+                            Redtakencounter.Text = Convert.ToString(redCountersRemaining);
+                        }
+                        else
+                        {
+                            blackCountersRemaining--;
+                            Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
+                        }
+
+                        if (redCountersRemaining == 0)
+                        {
+                            winner("Red");
+                        }
+                        else if (blackCountersRemaining == 0)
+                        {
+                            winner("Black");
+                        }
                     }
 
                     return true;
                 }
                 else
-                {
-                    firstClick = null;
-                    secondClick = null;
+                {                   
                     return false;
                 }
             }
-        }
-
-        public bool canRedKingMove()
-        {
-            bool topLeftTaken = false;
-            bool topRightTaken = false;
-            bool bottomLeftTaken = false;
-            bool bottomRightTaken = false;
-            Square topLeftToRemove = null;
-            Square topRightToRemove = null;
-            Square bottomLeftToRemove = null;
-            Square bottomRightToRemove = null;
-
-            Square topLeft;
-
-            if (firstClick.getX() == 0 || firstClick.getY() == 0)
-            {
-                topLeft = null;        //counter on left side of board
-            }
-            else
-            {
-                topLeft = squareArray[firstClick.getX() - 1, firstClick.getY() - 1];
-
-                if (topLeft.isOccupied())
-                {
-                    if (!topLeft.isRed() && topLeft.getX() != 0 && topLeft.getY() != 0)
-                    {
-                        topLeftToRemove = topLeft;
-                        topLeft = squareArray[topLeft.getX() - 1, topLeft.getY() - 1];
-                        topLeftTaken = true;
-
-                        if (topLeft.isOccupied())
-                        {
-                            topLeft = null;
-                        }
-                    }
-                    else
-                    {
-                        topLeft = null;
-                    }
-                }
-            }
-
-            Square topRight;
-
-            if (firstClick.getX() == 9 || firstClick.getY() == 0)
-            {
-                topRight = null;
-            }
-            else
-            {
-                topRight = squareArray[firstClick.getX() + 1, firstClick.getY() - 1];
-
-                if (topRight.isOccupied())
-                {
-                    if (!topRight.isRed() && topRight.getX() != 9 && topRight.getY() != 0)
-                    {
-                        topRightToRemove = topRight;
-                        topRight = squareArray[topRight.getX() + 1, topRight.getY() - 1];
-                        topRightTaken = true;
-
-                        if (topRight.isOccupied())
-                        {
-                            topRight = null;
-                        }
-                    }
-                    else
-                    {
-                        topRight = null;
-                    }
-                }
-            }
-
-            Square bottomLeft;
-
-            if (firstClick.getX() == 0 || firstClick.getY() == 9)
-            {
-                bottomLeft = null;
-            }
-            else
-            {
-                bottomLeft = squareArray[firstClick.getX() - 1, firstClick.getY() + 1];
-
-                if (bottomLeft.isOccupied())
-                {
-                    if (!bottomLeft.isRed() && bottomLeft.getX() != 0 && bottomLeft.getY() != 9)
-                    {
-                        bottomLeftToRemove = bottomLeft;
-                        bottomLeft = squareArray[bottomLeft.getX() - 1, bottomLeft.getY() + 1];
-                        bottomLeftTaken = true;
-
-                        if (bottomLeft.isOccupied())
-                        {
-                            bottomLeft = null;
-                        }
-                    }
-                    else
-                    {
-                        bottomLeft = null;
-                    }
-                }
-            }
-
-            Square bottomRight;
-
-            if (firstClick.getX() == 9 || firstClick.getY() == 9)
-            {
-                bottomRight = null;
-            }
-            else
-            {
-                bottomRight = squareArray[firstClick.getX() + 1, firstClick.getY() + 1];
-
-                if (bottomRight.isOccupied())
-                {
-                    if (!bottomRight.isRed() && bottomRight.getX() != 9 && bottomRight.getY() != 9)
-                    {
-                        bottomRightToRemove = bottomRight;
-                        bottomRight = squareArray[bottomRight.getX() + 1, bottomRight.getY() + 1];
-                        bottomRightTaken = true;
-
-                        if (bottomRight.isOccupied())
-                        {
-                            bottomRight = null;
-                        }
-                    }
-                    else
-                    {
-                        bottomRight = null;
-                    }
-                }
-            }
-
-            if (topLeft == null && topRight == null && bottomLeft == null && bottomRight == null)
-            {
-                firstClick = null;
-                secondClick = null;
-                return false;
-            }
-            else
-            {
-                if (secondClick == topLeft)
-                {
-                    MessageBox.Show("Second click is topLeft");
-
-                    if (topLeftTaken)
-                    {
-                        topLeftToRemove.setOccupied(false);
-                        topLeftToRemove.setKing(false);
-                        topLeftToRemove.BackgroundImage = Properties.Resources.Greyback;
-                        topLeftToRemove = null;
-                        blackCountersRemaining--;
-                        Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
-                    }
-
-                    return true;
-                }
-                else if (secondClick == topRight)
-                {
-                    MessageBox.Show("Second click is topRight");
-
-                    if (topRightTaken)
-                    {
-                        topRightToRemove.setOccupied(false);
-                        topRightToRemove.setKing(false);
-                        topRightToRemove.BackgroundImage = Properties.Resources.Greyback;
-                        topRightToRemove = null;
-                        blackCountersRemaining--;
-                        Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
-                    }
-
-                    return true;
-                }
-                else if (secondClick == bottomLeft)
-                {
-                    MessageBox.Show("Second click is bottomLeft");
-
-                    if (bottomLeftTaken)
-                    {
-                        bottomLeftToRemove.setOccupied(false);
-                        bottomLeftToRemove.setKing(false);
-                        bottomLeftToRemove.BackgroundImage = Properties.Resources.Greyback;
-                        bottomLeftToRemove = null;
-                        blackCountersRemaining--;
-                        Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
-                    }
-
-                    return true;
-                }
-                else if (secondClick == bottomRight)
-                {
-                    MessageBox.Show("Second click is bottomRight");
-
-                    if (bottomRightTaken)
-                    {
-                        bottomRightToRemove.setOccupied(false);
-                        bottomRightToRemove.setKing(false);
-                        bottomRightToRemove.BackgroundImage = Properties.Resources.Greyback;
-                        bottomRightToRemove = null;
-                        blackCountersRemaining--;
-                        Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
-                    }
-
-                    return true;
-                }
-                else
-                {
-                    firstClick = null;
-                    secondClick = null;
-                    return false;
-                }
-            }
-        }
+        }     
 
         private void checkers_Load(object sender, EventArgs e)  //REQUIRED
         {
@@ -986,6 +851,12 @@ namespace Checkers
 
             firstClick = null;
             secondClick = null;
+        }
+
+        public void winner(string colour)
+        {
+            MessageBox.Show(colour + " wins!");
+            Close();
         }
     }
 }
