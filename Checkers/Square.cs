@@ -15,7 +15,7 @@ namespace Checkers
     {
         bool occupied;
         bool red;
-        bool king;
+        bool king = false;
         int x;
         int y;
 
@@ -85,6 +85,15 @@ namespace Checkers
 
         public void setKing(bool x)
         {
+            if (isRed() && x)
+            {
+                this.BackgroundImage = Properties.Resources.Red_King;
+            }
+            else if (!isRed() && x)
+            {
+                this.BackgroundImage = Properties.Resources.Black_King;
+            }
+
             king = x;
         }
 
@@ -112,13 +121,13 @@ namespace Checkers
 
         public void removeCurrent()
         {
-            if (isRed() && isOccupied())
-            {
-                this.BackgroundImage = Properties.Resources.Red_Checker;
-            }
-            else if (!isRed() && isOccupied())
+            if (!isRed() && isOccupied())
             {
                 this.BackgroundImage = Properties.Resources.Black_Checker;
+            }
+            else 
+            {
+                this.BackgroundImage = Properties.Resources.Red_Checker;
             }
         }
     }

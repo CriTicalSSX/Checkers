@@ -66,32 +66,37 @@ namespace Checkers
 
         void squareEvent_Click(object sender, EventArgs e)
         {
-            /*if (blackTurn == true)
-            {
-                MessageBox.Show("Is black's turn");
-            }
-            else
-            {
-                MessageBox.Show("Is red's turn");
-            }
-            */
             Square square = sender as Square;
 
             if (firstClick == null)
             {
-                if (blackTurn && square.BackColor != Color.Red && square.isOccupied())
+                if (blackTurn && square.BackColor != Color.Red && square.isOccupied() && !square.isRed())
                 {
-                    square.setRed(false);
                     square.setCurrent();
                     firstClick = square;
-                    //MessageBox.Show("Black selected");
+                    
+                    if (firstClick.isKing())
+                    {
+                        firstClick.BackgroundImage = Properties.Resources.Black_King_Selected;
+                    }
+                    else
+                    {
+                        firstClick.BackgroundImage = Properties.Resources.Black_Checker_Selected;
+                    }
                 }
-                else if (!blackTurn && square.BackColor != Color.Red && square.isOccupied())
+                else if (!blackTurn && square.BackColor != Color.Red && square.isOccupied() && square.isRed())
                 {
-                    square.setRed(true);
                     square.setCurrent();
                     firstClick = square;
-                    //MessageBox.Show("Red selected");
+
+                    if (firstClick.isKing())
+                    {
+                        firstClick.BackgroundImage = Properties.Resources.Red_King_Selected;
+                    }
+                    else
+                    {
+                        firstClick.BackgroundImage = Properties.Resources.Red_Checker_Selected;
+                    }
                 }
                 else
                 {
@@ -102,31 +107,30 @@ namespace Checkers
             {
                 secondClick = square;
                 bool moved = false;
+                bool kinged = false;
+                bool nomove = false;
 
                 //BLACK'S TURN
                 if (blackTurn)
                 {
-                    if (secondClick.isKing())
+                    if (firstClick.isKing())
                     {
                         while (canBlackKingMove())
                         {
-                            secondClick.BackgroundImage = Properties.Resources.Black_Checker;
+                            secondClick.BackgroundImage = Properties.Resources.Black_King;
                             square.BackColor = Color.DarkSlateGray;
                             secondClick.setKing(square.isKing());
                             secondClick.setRed(false);
                             square.setOccupied(false);
                             square.setKing(false);
                             secondClick.setOccupied(true);
+                            firstClick.setKing(false);
+                            secondClick.setKing(true);
                             firstClick.removeCurrent();
                             firstClick.setOccupied(false);
                             firstClick.BackgroundImage = Properties.Resources.Greyback;
 
-                            if (secondClick.getY() == 0)
-                            {
-                                secondClick.setKing(true);
-                            }
-
-                            MessageBox.Show("Moved");
+                            //MessageBox.Show("Moved");
                             moved = true;
                         }
                     }
@@ -147,34 +151,49 @@ namespace Checkers
 
                             if (secondClick.getY() == 0)
                             {
+                               // MessageBox.Show("Reached end");
                                 secondClick.setKing(true);
                                 firstClick = null;
                                 secondClick = null;
-                                switchTurn();
+                                kinged = true;
+                                moved = true;
                             }
 
-                            MessageBox.Show("Moved");
-                            moved = true;
-
-                            while (canBlackKingMove())
+                            if (kinged == false)
                             {
-                                secondClick.BackgroundImage = Properties.Resources.Black_Checker;
-                                square.BackColor = Color.DarkSlateGray;
-                                secondClick.setKing(square.isKing());
-                                secondClick.setRed(false);
-                                square.setOccupied(false);
-                                square.setKing(false);
-                                secondClick.setOccupied(true);
-                                firstClick.removeCurrent();
-                                firstClick.setOccupied(false);
-                                firstClick.BackgroundImage = Properties.Resources.Greyback;
+                                //MessageBox.Show("Moved");
+                                moved = true;
 
-                                MessageBox.Show("Moved");
+                                while (canBlackKingMove())
+                                {
+                                    secondClick.BackgroundImage = Properties.Resources.Black_King;
+                                    square.BackColor = Color.DarkSlateGray;
+                                    secondClick.setKing(square.isKing());
+                                    secondClick.setRed(false);
+                                    square.setOccupied(false);
+                                    square.setKing(false);
+                                    secondClick.setOccupied(true);
+                                    secondClick.setKing(true);
+                                    firstClick.setKing(false);
+                                    firstClick.removeCurrent();
+                                    firstClick.setOccupied(false);
+                                    firstClick.BackgroundImage = Properties.Resources.Greyback;
+
+                                    //MessageBox.Show("Moved");
+                                }
                             }
+                        }
+                        else
+                        {
+                            nomove = true;
                         }
                     }
 
-                    MessageBox.Show("Cannot make this move.");
+                    if (nomove)
+                    {
+                        MessageBox.Show("Cannot make this move.");
+                    }
+
                     firstClick = null;
                     secondClick = null;
 
@@ -187,30 +206,24 @@ namespace Checkers
                 //RED'S TURN
                 else
                 {
-                    if (secondClick.isKing())
+                    if (firstClick.isKing())
                     {
                         while (canRedKingMove())
                         {
-                            secondClick.BackgroundImage = Properties.Resources.Red_Checker;
+                            secondClick.BackgroundImage = Properties.Resources.Red_King;
                             square.BackColor = Color.DarkSlateGray;
                             secondClick.setKing(square.isKing());
                             secondClick.setRed(true);
                             square.setOccupied(false);
                             square.setKing(false);
                             secondClick.setOccupied(true);
+                            secondClick.setKing(true);
+                            firstClick.setKing(false);
                             firstClick.removeCurrent();
                             firstClick.setOccupied(false);
                             firstClick.BackgroundImage = Properties.Resources.Greyback;
 
-                            if (secondClick.getY() == 9)
-                            {
-                                secondClick.setKing(true);
-                                firstClick = null;
-                                secondClick = null;
-                                switchTurn();
-                            }
-
-                            MessageBox.Show("Moved");
+                            //MessageBox.Show("Moved");
                             moved = true;
                         }
                     }
@@ -232,35 +245,53 @@ namespace Checkers
                             if (secondClick.getY() == 9)
                             {
                                 secondClick.setKing(true);
+                                firstClick = null;
+                                secondClick = null;
+                                kinged = true;
+                                moved = true;
                             }
 
-                            MessageBox.Show("Moved");
-                            moved = true;
 
-                            while (canRedKingMove())
+                            if (kinged == false)
                             {
-                                secondClick.BackgroundImage = Properties.Resources.Red_Checker;
-                                square.BackColor = Color.DarkSlateGray;
-                                secondClick.setKing(square.isKing());
-                                secondClick.setRed(true);
-                                square.setOccupied(false);
-                                square.setKing(false);
-                                secondClick.setOccupied(true);
-                                firstClick.removeCurrent();
-                                firstClick.setOccupied(false);
-                                firstClick.BackgroundImage = Properties.Resources.Greyback;
+                                //MessageBox.Show("Moved");
+                                moved = true;
 
-                                if (secondClick.getY() == 9)
+                                while (canRedKingMove())
                                 {
+                                    secondClick.BackgroundImage = Properties.Resources.Red_King;
+                                    square.BackColor = Color.DarkSlateGray;
+                                    secondClick.setKing(square.isKing());
+                                    secondClick.setRed(true);
+                                    square.setOccupied(false);
+                                    square.setKing(false);
+                                    secondClick.setOccupied(true);
                                     secondClick.setKing(true);
-                                }
+                                    firstClick.setKing(false);
+                                    firstClick.removeCurrent();
+                                    firstClick.setOccupied(false);
+                                    firstClick.BackgroundImage = Properties.Resources.Greyback;
 
-                                MessageBox.Show("Moved");
+                                    if (secondClick.getY() == 9)
+                                    {
+                                        secondClick.setKing(true);
+                                    }
+
+                                    //MessageBox.Show("Moved");
+                                }
                             }
+                        }
+                        else
+                        {
+                            nomove = true;
                         }
                     }
 
-                    MessageBox.Show("Cannot make this move.");
+                    if (nomove)
+                    {
+                        MessageBox.Show("Cannot make this move.");
+                    }
+
                     firstClick = null;
                     secondClick = null;
 
@@ -350,7 +381,7 @@ namespace Checkers
             {
                 if (secondClick == diagonalLeft)
                 {
-                    MessageBox.Show("Second click is diagonalLeft"); 
+                    //MessageBox.Show("Second click is diagonalLeft"); 
                     
                     if (leftTaken)
                     {
@@ -366,7 +397,7 @@ namespace Checkers
                 }
                 else if (secondClick == diagonalRight)
                 {
-                    MessageBox.Show("Second click is diagonalRight");
+                    //MessageBox.Show("Second click is diagonalRight");
 
                     if (rightTaken)
                     {
@@ -383,7 +414,6 @@ namespace Checkers
                 else
                 {
                     firstClick.removeCurrent();
-                    secondClick.removeCurrent();
                     firstClick = null;
                     secondClick = null;
                     return false;
@@ -440,7 +470,7 @@ namespace Checkers
 
                 if (diagonalRight.isOccupied())
                 {
-                    if (!diagonalRight.isRed() && diagonalRight.getX() != 0 && diagonalLeft.getY() != 9)
+                    if (!diagonalRight.isRed() && diagonalRight.getX() != 0 && diagonalRight.getY() != 9)
                     {
                         rightCounterToRemove = diagonalRight;
                         diagonalRight = squareArray[diagonalRight.getX() - 1, diagonalRight.getY() + 1];
@@ -460,6 +490,7 @@ namespace Checkers
 
             if (diagonalLeft == null && diagonalRight == null)
             {
+                firstClick.removeCurrent();
                 firstClick = null;
                 secondClick = null;
                 return false;
@@ -468,7 +499,7 @@ namespace Checkers
             {
                 if (secondClick == diagonalLeft)
                 {
-                    MessageBox.Show("Second click is diagonalLeft");
+                    //MessageBox.Show("Second click is diagonalLeft");
 
                     if (leftTaken)
                     {
@@ -484,7 +515,7 @@ namespace Checkers
                 }
                 else if (secondClick == diagonalRight)
                 {
-                    MessageBox.Show("Second click is diagonalRight");
+                    //MessageBox.Show("Second click is diagonalRight");
 
                     if (rightTaken)
                     {
@@ -500,6 +531,8 @@ namespace Checkers
                 }
                 else
                 {
+                    firstClick.removeCurrent();
+                    firstClick.BackgroundImage = Properties.Resources.Red_Checker;
                     firstClick = null;
                     secondClick = null;
                     return false;
@@ -768,14 +801,14 @@ namespace Checkers
             }
             else
             {
-                topRight = squareArray[firstClick.getX() + 1, firstClick.getY() + 1];
+                topRight = squareArray[firstClick.getX() + 1, firstClick.getY() - 1];
 
                 if (topRight.isOccupied())
                 {
                     if (!topRight.isRed() && topRight.getX() != 9 && topRight.getY() != 0)
                     {
                         topRightToRemove = topRight;
-                        topRight = squareArray[topRight.getX() + 1, topRight.getY() + 1];
+                        topRight = squareArray[topRight.getX() + 1, topRight.getY() - 1];
                         topRightTaken = true;
 
                         if (topRight.isOccupied())
@@ -942,13 +975,13 @@ namespace Checkers
             {
                 blackTurn = false;
                 Turncounter.Text = "RED";
-                MessageBox.Show("Red's turn");
+                //MessageBox.Show("Red's turn");
             }
             else
             {
                 blackTurn = true;
                 Turncounter.Text = "BLACK";
-                MessageBox.Show("Black's turn");
+                //MessageBox.Show("Black's turn");
             }
 
             firstClick = null;
