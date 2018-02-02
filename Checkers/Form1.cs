@@ -12,15 +12,15 @@ using System.Drawing.Drawing2D;
 
 namespace Checkers
 {
-    public partial class Form1 : Form
+    public partial class checkers : Form
     {
         Square[,] squareArray = new Square[10, 10];       // Create 2D array of buttons
         Square firstClick, secondClick; 
         bool blackTurn = true;
-        int redCountersTaken = 0;
-        int blackCountersTaken = 0;
+        int redCountersRemaining = 12;
+        int blackCountersRemaining = 12;
 
-        public Form1()
+        public checkers()
         {
             InitializeComponent();
             BuildBoard();
@@ -358,6 +358,8 @@ namespace Checkers
                         leftCounterToRemove.setKing(false);
                         leftCounterToRemove.BackgroundImage = Properties.Resources.Greyback;
                         leftCounterToRemove = null;
+                        redCountersRemaining--;
+                        Redtakencounter.Text = Convert.ToString(redCountersRemaining);
                     }
 
                     return true;
@@ -372,6 +374,8 @@ namespace Checkers
                         rightCounterToRemove.setKing(false);
                         rightCounterToRemove.BackgroundImage = Properties.Resources.Greyback;
                         rightCounterToRemove = null;
+                        redCountersRemaining--;
+                        Redtakencounter.Text = Convert.ToString(redCountersRemaining);
                     }
 
                     return true;
@@ -472,6 +476,8 @@ namespace Checkers
                         leftCounterToRemove.setKing(false);
                         leftCounterToRemove.BackgroundImage = Properties.Resources.Greyback;
                         leftCounterToRemove = null;
+                        blackCountersRemaining--;
+                        Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
                     }
 
                     return true;
@@ -486,6 +492,8 @@ namespace Checkers
                         rightCounterToRemove.setKing(false);
                         rightCounterToRemove.BackgroundImage = Properties.Resources.Greyback;
                         rightCounterToRemove = null;
+                        blackCountersRemaining--;
+                        Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
                     }
 
                     return true;
@@ -648,6 +656,8 @@ namespace Checkers
                         topLeftToRemove.setKing(false);
                         topLeftToRemove.BackgroundImage = Properties.Resources.Greyback;
                         topLeftToRemove = null;
+                        redCountersRemaining--;
+                        Redtakencounter.Text = Convert.ToString(redCountersRemaining);
                     }
 
                     return true;
@@ -662,6 +672,8 @@ namespace Checkers
                         topRightToRemove.setKing(false);
                         topRightToRemove.BackgroundImage = Properties.Resources.Greyback;
                         topRightToRemove = null;
+                        redCountersRemaining--;
+                        Redtakencounter.Text = Convert.ToString(redCountersRemaining);
                     }
 
                     return true;
@@ -676,6 +688,8 @@ namespace Checkers
                         bottomLeftToRemove.setKing(false);
                         bottomLeftToRemove.BackgroundImage = Properties.Resources.Greyback;
                         bottomLeftToRemove = null;
+                        redCountersRemaining--;
+                        Redtakencounter.Text = Convert.ToString(redCountersRemaining);
                     }
 
                     return true;
@@ -690,6 +704,8 @@ namespace Checkers
                         bottomRightToRemove.setKing(false);
                         bottomRightToRemove.BackgroundImage = Properties.Resources.Greyback;
                         bottomRightToRemove = null;
+                        redCountersRemaining--;
+                        Redtakencounter.Text = Convert.ToString(redCountersRemaining);
                     }
 
                     return true;
@@ -852,6 +868,8 @@ namespace Checkers
                         topLeftToRemove.setKing(false);
                         topLeftToRemove.BackgroundImage = Properties.Resources.Greyback;
                         topLeftToRemove = null;
+                        blackCountersRemaining--;
+                        Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
                     }
 
                     return true;
@@ -866,6 +884,8 @@ namespace Checkers
                         topRightToRemove.setKing(false);
                         topRightToRemove.BackgroundImage = Properties.Resources.Greyback;
                         topRightToRemove = null;
+                        blackCountersRemaining--;
+                        Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
                     }
 
                     return true;
@@ -880,6 +900,8 @@ namespace Checkers
                         bottomLeftToRemove.setKing(false);
                         bottomLeftToRemove.BackgroundImage = Properties.Resources.Greyback;
                         bottomLeftToRemove = null;
+                        blackCountersRemaining--;
+                        Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
                     }
 
                     return true;
@@ -894,6 +916,8 @@ namespace Checkers
                         bottomRightToRemove.setKing(false);
                         bottomRightToRemove.BackgroundImage = Properties.Resources.Greyback;
                         bottomRightToRemove = null;
+                        blackCountersRemaining--;
+                        Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
                     }
 
                     return true;
@@ -907,7 +931,7 @@ namespace Checkers
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)  //REQUIRED
+        private void checkers_Load(object sender, EventArgs e)  //REQUIRED
         {
 
         }
@@ -917,11 +941,13 @@ namespace Checkers
             if (blackTurn == true)
             {
                 blackTurn = false;
+                Turncounter.Text = "RED";
                 MessageBox.Show("Red's turn");
             }
             else
             {
                 blackTurn = true;
+                Turncounter.Text = "BLACK";
                 MessageBox.Show("Black's turn");
             }
 
