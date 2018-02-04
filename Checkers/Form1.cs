@@ -20,11 +20,9 @@ namespace Checkers
         Square topRight;
         Square bottomLeft;
         Square bottomRight;
-        Square topLeftToRemove = null;
-        Square topRightToRemove = null;
-        Square bottomLeftToRemove = null;
-        Square bottomRightToRemove = null;
         bool blackTurn = true;
+        bool continueMoving = false;
+        bool pieceTaken = false;
         int redCountersRemaining = 20;
         int blackCountersRemaining = 20;
 
@@ -65,7 +63,6 @@ namespace Checkers
                     }
 
                     squareArray[x, y].setKing(false);
-                    //squareArray[x, y].Text = Convert.ToString((x + 1) + "," + (y + 1));
                     squareArray[x, y].Click += new EventHandler(this.squareEvent_Click);
                     Controls.Add(squareArray[x, y]);
                 }
@@ -75,7 +72,7 @@ namespace Checkers
         void squareEvent_Click(object sender, EventArgs e)
         {
             Square square = sender as Square;
-
+          
             if (firstClick == null)
             {
                 if (blackTurn && square.BackColor != Color.Red && square.isOccupied() && !square.isRed())
@@ -108,152 +105,374 @@ namespace Checkers
                 }
                 else
                 {
-                    firstClick = null;
+                    
                 }
             }
             else
             {
                 secondClick = square;
                 bool moved = false;
-                bool nomove = false;               
+                bool nomove = false;
+                bool kinged = false;
 
                 //BLACK'S TURN
                 if (blackTurn)
                 {
-                    if (firstClick.isKing())
+                    if (continueMoving)
                     {
-                        if (canKingMove("black"))
+                        if (secondClick == topLeft || secondClick == topRight || secondClick == bottomLeft || secondClick == bottomRight && secondClick != null)
                         {
-                            secondClick.BackgroundImage = Properties.Resources.Black_King;
-                            square.BackColor = Color.DarkSlateGray;
-                            secondClick.setKing(square.isKing());
-                            secondClick.setRed(false);
-                            square.setOccupied(false);
-                            square.setKing(false);
-                            secondClick.setOccupied(true);
-                            firstClick.setKing(false);
-                            secondClick.setKing(true);
-                            firstClick.removeCurrent();
-                            firstClick.setOccupied(false);
-                            firstClick.BackgroundImage = Properties.Resources.Greyback;
-                           
-                            moved = true;
-                        }
+                            Square taken;
+                            if (secondClick == topLeft)
+                            {
+                                taken = squareArray[secondClick.getX() + 1, secondClick.getY() + 1];
+                            }
+                            else if (secondClick == topRight)
+                            {
+                                taken = squareArray[secondClick.getX() - 1, secondClick.getY() + 1];
+                            }
+                            else if (secondClick == bottomLeft)
+                            {
+                                taken = squareArray[secondClick.getX() + 1, secondClick.getY() - 1];
+                            }
+                            else
+                            {
+                                taken = squareArray[secondClick.getX() - 1, secondClick.getY() - 1];
+                            }
 
+                            if (firstClick.isKing())
+                            {
+                                secondClick.BackgroundImage = Properties.Resources.Black_King;
+                                secondClick.setKing(true);
+                            }
+                            else
+                            {
+                                secondClick.BackgroundImage = Properties.Resources.Black_Checker;
+                            }
+                            
+                            secondClick.setKing(firstClick.isKing());
+                            secondClick.setRed(false);
+                            secondClick.setOccupied(true);
+                            firstClick.removeCurrent();
+                            secondClick.setCurrent();
+                            firstClick.setOccupied(false);
+                            firstClick.setKing(false);
+                            firstClick.BackgroundImage = Properties.Resources.Greyback;
+                            taken.BackgroundImage = Properties.Resources.Greyback;
+                            taken.setOccupied(false);
+                            taken.setKing(false);
+                            redCountersRemaining--;
+                            Redtakencounter.Text = Convert.ToString(redCountersRemaining);
+                            pieceTaken = true;
+                            
+                            if (redCountersRemaining == 0)
+                            {
+                                winner("Black");
+                            }
+
+                            if (canStillMove("black"))
+                            {
+                                firstClick = secondClick;
+                                firstClick.setKing(secondClick.isKing());
+                                firstClick.setCurrent();
+                                secondClick = null;
+                                continueMoving = true;
+                            }
+                            else
+                            {
+                                continueMoving = false;
+                                if (secondClick != null)
+                                {
+                                    secondClick.removeCurrent();
+                                }
+                                pieceTaken = false;
+                                moved = true;
+                            }
+                        }
                     }
                     else
                     {
-                        if (canBlackMove())
+                        if (firstClick.isKing())
                         {
-                            secondClick.BackgroundImage = Properties.Resources.Black_Checker;
-                            square.BackColor = Color.DarkSlateGray;
-                            secondClick.setKing(square.isKing());
-                            secondClick.setRed(false);
-                            square.setOccupied(false);
-                            square.setKing(false);
-                            secondClick.setOccupied(true);
-                            firstClick.removeCurrent();
-                            firstClick.setOccupied(false);
-                            firstClick.BackgroundImage = Properties.Resources.Greyback;
-
-                            if (secondClick.getY() == 0)
+                            if (canKingMove("black"))
                             {
-                               // MessageBox.Show("Reached end");
                                 secondClick.setKing(true);
-                                firstClick = null;
-                                secondClick = null;                               
+                                secondClick.BackgroundImage = Properties.Resources.Black_King;
+                                secondClick.setRed(false);
+                                secondClick.setOccupied(true); 
+                                secondClick.setCurrent();
+                                firstClick.setKing(false);
+                                firstClick.removeCurrent();
+                                firstClick.setOccupied(false);
+                                firstClick.BackgroundImage = Properties.Resources.Greyback;
+
+                                if (canStillMove("black"))
+                                {
+                                    firstClick = secondClick;
+                                    firstClick.setCurrent();
+                                    secondClick = null;
+                                    continueMoving = true;
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Finished");
+                                    continueMoving = false;
+
+                                    if (secondClick != null)
+                                    {
+                                        secondClick.removeCurrent();
+                                    }
+
+                                    pieceTaken = false;
+                                    moved = true;
+                                }
+                            }
+                            else
+                            {
+                                nomove = true;
                             }
 
-                            moved = true;
                         }
                         else
                         {
-                            firstClick = null;
-                            secondClick = null;
-                            nomove = true;
+                            if (canBlackMove())
+                            {
+                                secondClick.BackgroundImage = Properties.Resources.Black_Checker;
+                                square.BackColor = Color.DarkSlateGray;
+                                secondClick.setKing(square.isKing());
+                                secondClick.setRed(false);
+                                square.setOccupied(false);
+                                square.setKing(false);
+                                secondClick.setOccupied(true);
+                                firstClick.removeCurrent();
+                                firstClick.setOccupied(false);
+                                firstClick.BackgroundImage = Properties.Resources.Greyback;
+
+                                if (secondClick.getY() == 0)
+                                {
+                                    secondClick.setKing(true);
+                                    kinged = true;
+                                }
+
+                                if (canStillMove("black") && secondClick != null && !kinged)
+                                {
+                                    firstClick = secondClick;
+                                    firstClick.setKing(secondClick.isKing());
+                                    firstClick.setCurrent();
+                                    secondClick = null;
+                                    continueMoving = true;
+                                }
+                                else
+                                {
+                                    continueMoving = false;
+                                    if (secondClick != null)
+                                    {
+                                        secondClick.removeCurrent();
+                                    }
+                                    pieceTaken = false;
+                                    moved = true;
+                                }
+                            }
+                            else
+                            {
+                                nomove = true;
+                            }
                         }
-                    }
 
-                    if (nomove)
-                    {
-                        MessageBox.Show("Cannot make this move.");
-                    }
-                    
-                    firstClick = null;
-                    secondClick = null;
-
-                    if (moved)
-                    {
-                        switchTurn();
+                        if (nomove)
+                        {
+                            MessageBox.Show("Cannot make this move.");
+                            firstClick.removeCurrent();
+                        }
                     }
                 }
 
                 //RED'S TURN
                 else
                 {
-                    if (firstClick.isKing())
+                    if (continueMoving)
                     {
-                        if (canKingMove("red"))
+                        if (secondClick == topLeft || secondClick == topRight || secondClick == bottomLeft || secondClick == bottomRight && secondClick != null)
                         {
-                            secondClick.BackgroundImage = Properties.Resources.Red_King;
-                            square.BackColor = Color.DarkSlateGray;
-                            secondClick.setKing(square.isKing());
+                            if (firstClick.isKing())
+                            {
+                                secondClick.BackgroundImage = Properties.Resources.Red_King;
+                                secondClick.setKing(true);
+                            }
+                            else
+                            {
+                                secondClick.BackgroundImage = Properties.Resources.Red_Checker;
+                                secondClick.setKing(false);
+                            }
+
+                            Square taken;
+                            if (secondClick == topLeft)
+                            {
+                                taken = squareArray[secondClick.getX() + 1, secondClick.getY() + 1];
+                            }
+                            else if (secondClick == topRight)
+                            {
+                                taken = squareArray[secondClick.getX() - 1, secondClick.getY() + 1];
+                            }
+                            else if (secondClick == bottomLeft)
+                            {
+                                taken = squareArray[secondClick.getX() + 1, secondClick.getY() - 1];
+                            }
+                            else
+                            {
+                                taken = squareArray[secondClick.getX() - 1, secondClick.getY() - 1];
+                            }
+                           
+                            secondClick.setKing(firstClick.isKing());
                             secondClick.setRed(true);
-                            square.setOccupied(false);
-                            square.setKing(false);
                             secondClick.setOccupied(true);
-                            secondClick.setKing(true);
-                            firstClick.setKing(false);
+                            secondClick.setCurrent();
                             firstClick.removeCurrent();
                             firstClick.setOccupied(false);
                             firstClick.BackgroundImage = Properties.Resources.Greyback;
+                            taken.BackgroundImage = Properties.Resources.Greyback;
+                            taken.setOccupied(false);
+                            taken.setKing(false);
+                            blackCountersRemaining--;
+                            Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
+                            pieceTaken = true;
 
-                            //MessageBox.Show("Moved");
-                            moved = true;
+                            if (blackCountersRemaining == 0)
+                            {
+                                winner("Red");
+                            }
+
+                            if (canStillMove("red"))
+                            {
+                                firstClick = secondClick;
+                                firstClick.setKing(secondClick.isKing());
+                                firstClick.setCurrent();                                
+                                secondClick = null;
+                                continueMoving = true;
+                            }
+                            else
+                            {
+                                continueMoving = false;
+                                if (secondClick != null)
+                                {
+                                    secondClick.removeCurrent();
+                                }
+                                pieceTaken = false;
+                                moved = true;
+                            }
                         }
                     }
                     else
                     {
-                        if (canRedMove())
+                        if (firstClick.isKing())
                         {
-                            secondClick.BackgroundImage = Properties.Resources.Red_Checker;
-                            square.BackColor = Color.DarkSlateGray;
-                            secondClick.setKing(square.isKing());
-                            secondClick.setRed(true);
-                            square.setOccupied(false);
-                            square.setKing(false);
-                            secondClick.setOccupied(true);
-                            firstClick.removeCurrent();
-                            firstClick.setOccupied(false);
-                            firstClick.BackgroundImage = Properties.Resources.Greyback;
-
-                            if (secondClick.getY() == 9)
+                            if (canKingMove("red"))
                             {
+                                secondClick.BackgroundImage = Properties.Resources.Red_King;
+                                square.BackColor = Color.DarkSlateGray;
+                                secondClick.setKing(square.isKing());
+                                secondClick.setRed(true);
+                                square.setOccupied(false);
+                                square.setKing(false);
+                                secondClick.setOccupied(true);
                                 secondClick.setKing(true);
-                                firstClick = null;
-                                secondClick = null;                             
-                            }
+                                firstClick.setKing(false);
+                                firstClick.removeCurrent();
+                                firstClick.setOccupied(false);
+                                firstClick.BackgroundImage = Properties.Resources.Greyback;
 
-                            moved = true;
+                                if (canStillMove("red"))
+                                {
+                                    firstClick = secondClick;
+                                    firstClick.setKing(secondClick.isKing());
+                                    firstClick.setCurrent();                                   
+                                    secondClick = null;
+                                    continueMoving = true;
+                                }
+                                else
+                                {
+                                    continueMoving = false;
+                                    if (secondClick != null)
+                                    {
+                                        secondClick.removeCurrent();
+                                    }
+                                    pieceTaken = false;
+                                    moved = true;
+                                }
+                            }
                         }
                         else
                         {
-                            nomove = true;
+                            if (canRedMove())
+                            {
+                                secondClick.BackgroundImage = Properties.Resources.Red_Checker;
+                                square.BackColor = Color.DarkSlateGray;
+                                secondClick.setKing(square.isKing());
+                                secondClick.setRed(true);
+                                square.setOccupied(false);
+                                square.setKing(false);
+                                secondClick.setOccupied(true);
+                                firstClick.removeCurrent();
+                                firstClick.setOccupied(false);
+                                firstClick.BackgroundImage = Properties.Resources.Greyback;
+
+                                if (secondClick.getY() == 9)
+                                {
+                                    secondClick.setKing(true);
+                                    kinged = true;
+                                }
+
+                                if (canStillMove("red") && secondClick != null && !kinged)
+                                {
+                                    firstClick = secondClick;
+                                    firstClick.setKing(secondClick.isKing());
+                                    firstClick.setCurrent();                                   
+                                    secondClick = null;
+                                    continueMoving = true;
+                                }
+                                else
+                                {
+                                    continueMoving = false;
+                                    if (secondClick != null)
+                                    {
+                                        secondClick.removeCurrent();
+                                    }
+                                    pieceTaken = false;
+                                    moved = true;
+                                }
+                            }
+                            else
+                            {
+                                nomove = true;
+                            }
+                        }
+
+                        if (nomove)
+                        {
+                            MessageBox.Show("Cannot make this move.");
                         }
                     }
+                }
 
-                    if (nomove)
+                if (!continueMoving)
+                {
+                    if (firstClick != null)
                     {
-                        MessageBox.Show("Cannot make this move.");
+                        firstClick.removeCurrent();
+                    }
+
+                    if (secondClick != null)
+                    {
+                        secondClick.removeCurrent();
                     }
 
                     firstClick = null;
                     secondClick = null;
+                }
 
-                    if (moved)
-                    {
-                        switchTurn();
-                    }
+                if (moved)
+                {
+                    switchTurn();
                 }
             }
         }
@@ -327,17 +546,12 @@ namespace Checkers
 
             if (diagonalLeft == null && diagonalRight == null)
             {
-                firstClick.removeCurrent();
-                firstClick = null;
-                secondClick = null;
                 return false;
             }
             else
             {
                 if (secondClick == diagonalLeft)
                 {
-                    //MessageBox.Show("Second click is diagonalLeft"); 
-                    
                     if (leftTaken)
                     {
                         leftCounterToRemove.setOccupied(false);
@@ -346,10 +560,11 @@ namespace Checkers
                         leftCounterToRemove = null;
                         redCountersRemaining--;
                         Redtakencounter.Text = Convert.ToString(redCountersRemaining);
+                        pieceTaken = true;
 
                         if (redCountersRemaining == 0)
                         {
-                            winner("Red");
+                            winner("Black");
                         }
                     }
 
@@ -357,8 +572,6 @@ namespace Checkers
                 }
                 else if (secondClick == diagonalRight)
                 {
-                    //MessageBox.Show("Second click is diagonalRight");
-
                     if (rightTaken)
                     {
                         rightCounterToRemove.setOccupied(false);
@@ -367,10 +580,11 @@ namespace Checkers
                         rightCounterToRemove = null;
                         redCountersRemaining--;
                         Redtakencounter.Text = Convert.ToString(redCountersRemaining);
+                        pieceTaken = true;
 
                         if (redCountersRemaining == 0)
                         {
-                            winner("Red");
+                            winner("Black");
                         }
                     }
 
@@ -378,9 +592,6 @@ namespace Checkers
                 }
                 else
                 {
-                    firstClick.removeCurrent();
-                    firstClick = null;
-                    secondClick = null;
                     return false;
                 }
             }
@@ -455,17 +666,12 @@ namespace Checkers
 
             if (diagonalLeft == null && diagonalRight == null)
             {
-                firstClick.removeCurrent();
-                firstClick = null;
-                secondClick = null;
                 return false;
             }
             else
             {
                 if (secondClick == diagonalLeft)
                 {
-                    //MessageBox.Show("Second click is diagonalLeft");
-
                     if (leftTaken)
                     {
                         leftCounterToRemove.setOccupied(false);
@@ -474,10 +680,11 @@ namespace Checkers
                         leftCounterToRemove = null;
                         blackCountersRemaining--;
                         Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
+                        pieceTaken = true;
 
                         if (blackCountersRemaining == 0)
                         {
-                            winner("Black");
+                            winner("Red");
                         }
                     }
 
@@ -485,8 +692,6 @@ namespace Checkers
                 }
                 else if (secondClick == diagonalRight)
                 {
-                    //MessageBox.Show("Second click is diagonalRight");
-
                     if (rightTaken)
                     {
                         rightCounterToRemove.setOccupied(false);
@@ -495,10 +700,11 @@ namespace Checkers
                         rightCounterToRemove = null;
                         blackCountersRemaining--;
                         Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
+                        pieceTaken = true;
 
                         if (blackCountersRemaining == 0)
                         {
-                            winner("Black");
+                            winner("Red");
                         }
                     }
 
@@ -506,10 +712,7 @@ namespace Checkers
                 }
                 else
                 {
-                    firstClick.removeCurrent();
-                    firstClick.BackgroundImage = Properties.Resources.Red_Checker;
-                    firstClick = null;
-                    secondClick = null;
+                    //firstClick.BackgroundImage = Properties.Resources.Red_Checker;
                     return false;
                 }
             }
@@ -521,6 +724,10 @@ namespace Checkers
             bool topRightTaken = false;
             bool bottomLeftTaken = false;
             bool bottomRightTaken = false;
+            Square topLeftToRemove = null;
+            Square topRightToRemove = null;
+            Square bottomLeftToRemove = null;
+            Square bottomRightToRemove = null;
 
             if (firstClick.getX() == 0 || firstClick.getY() == 0)
             {
@@ -680,22 +887,19 @@ namespace Checkers
 
             if (topLeft == null && topRight == null && bottomLeft == null && bottomRight == null)
             {
-                firstClick = null;
-                secondClick = null;
                 return false;
             }
             else
             {
                 if (secondClick == topLeft)
                 {
-                    MessageBox.Show("Second click is topLeft");
-
                     if (topLeftTaken)
                     {
                         topLeftToRemove.setOccupied(false);
                         topLeftToRemove.setKing(false);
                         topLeftToRemove.BackgroundImage = Properties.Resources.Greyback;
                         topLeftToRemove = null;
+                        pieceTaken = true;
 
                         if (colour == "black")
                         {
@@ -710,11 +914,11 @@ namespace Checkers
 
                         if (redCountersRemaining == 0)
                         {
-                            winner("Red");
+                            winner("Black");
                         }
                         else if (blackCountersRemaining == 0)
                         {
-                            winner("Black");
+                            winner("Red");
                         }
                     }
 
@@ -722,14 +926,13 @@ namespace Checkers
                 }
                 else if (secondClick == topRight)
                 {
-                    //MessageBox.Show("Second click is topRight");
-
                     if (topRightTaken)
                     {
                         topRightToRemove.setOccupied(false);
                         topRightToRemove.setKing(false);
                         topRightToRemove.BackgroundImage = Properties.Resources.Greyback;
                         topRightToRemove = null;
+                        pieceTaken = true;
 
                         if (colour == "black")
                         {
@@ -744,11 +947,11 @@ namespace Checkers
 
                         if (redCountersRemaining == 0)
                         {
-                            winner("Red");
+                            winner("Black");
                         }
                         else if (blackCountersRemaining == 0)
                         {
-                            winner("Black");
+                            winner("Red");
                         }
                     }
 
@@ -756,14 +959,13 @@ namespace Checkers
                 }
                 else if (secondClick == bottomLeft)
                 {
-                    //MessageBox.Show("Second click is bottomLeft");
-
                     if (bottomLeftTaken)
                     {
                         bottomLeftToRemove.setOccupied(false);
                         bottomLeftToRemove.setKing(false);
                         bottomLeftToRemove.BackgroundImage = Properties.Resources.Greyback;
                         bottomLeftToRemove = null;
+                        pieceTaken = true;
 
                         if (colour == "black")
                         {
@@ -778,11 +980,11 @@ namespace Checkers
 
                         if (redCountersRemaining == 0)
                         {
-                            winner("Red");
+                            winner("Black");
                         }
                         else if (blackCountersRemaining == 0)
                         {
-                            winner("Black");
+                            winner("Red");
                         }
                     }
 
@@ -790,14 +992,13 @@ namespace Checkers
                 }
                 else if (secondClick == bottomRight)
                 {
-                    //MessageBox.Show("Second click is bottomRight");
-
                     if (bottomRightTaken)
                     {
                         bottomRightToRemove.setOccupied(false);
                         bottomRightToRemove.setKing(false);
                         bottomRightToRemove.BackgroundImage = Properties.Resources.Greyback;
                         bottomRightToRemove = null;
+                        pieceTaken = true;
 
                         if (colour == "black")
                         {
@@ -812,11 +1013,11 @@ namespace Checkers
 
                         if (redCountersRemaining == 0)
                         {
-                            winner("Red");
+                            winner("Black");
                         }
                         else if (blackCountersRemaining == 0)
                         {
-                            winner("Black");
+                            winner("Red");
                         }
                     }
 
@@ -829,6 +1030,110 @@ namespace Checkers
             }
         }     
 
+        public bool canStillMove(string colour)
+        {
+            if (!pieceTaken)
+            {
+                continueMoving = false;
+                topLeft = null;
+                topRight = null;
+                bottomLeft = null;
+                bottomRight = null;
+                return false;
+            }
+
+            int leftmost = secondClick.getX() - 2;
+            int rightmost = secondClick.getX() + 2;
+            int topmost = secondClick.getY() - 2;
+            int bottommost = secondClick.getY() + 2;
+            topLeft = null;
+            topRight = null;
+            bottomLeft = null;
+            bottomRight = null;
+
+            if (colour == "red")
+            {
+                if (leftmost >= 0 && topmost >= 0)
+                {
+                    if (squareArray[leftmost+1, topmost+1].isOccupied() && !squareArray[leftmost+1, topmost+1].isRed() && !squareArray[leftmost, topmost].isOccupied())
+                    {
+                        topLeft = squareArray[leftmost, topmost];
+                    }
+                }
+
+                if (rightmost <= 9 && topmost >= 0)
+                {
+                    if (squareArray[rightmost - 1, topmost + 1].isOccupied() && !squareArray[rightmost - 1, topmost + 1].isRed() && !squareArray[rightmost, topmost].isOccupied())
+                    {
+                        topRight = squareArray[rightmost, topmost];
+                    }
+                }
+
+                if (leftmost >= 0 && bottommost <= 9)
+                {
+                    if (squareArray[leftmost + 1, bottommost - 1].isOccupied() && !squareArray[leftmost + 1, bottommost - 1].isRed() && !squareArray[leftmost, bottommost].isOccupied())
+                    {
+                        bottomLeft = squareArray[leftmost, bottommost];
+                    }
+                }
+
+                if (rightmost <=9 && bottommost <= 9)
+                {
+                    if (squareArray[rightmost - 1, bottommost - 1].isOccupied() && !squareArray[rightmost - 1, bottommost - 1].isRed() && !squareArray[rightmost, bottommost].isOccupied())
+                    {
+                        bottomRight = squareArray[rightmost, bottommost];
+                    }
+                }
+            }
+            else
+            {
+                if (leftmost >= 0 && topmost >= 0)
+                {
+                    if (squareArray[leftmost + 1, topmost + 1].isOccupied() && squareArray[leftmost + 1, topmost + 1].isRed() && !squareArray[leftmost, topmost].isOccupied())
+                    {
+                        topLeft = squareArray[leftmost, topmost];
+                    }
+                }
+
+                if (rightmost <= 9 && topmost >= 0)
+                {
+                    if (squareArray[rightmost - 1, topmost + 1].isOccupied() && squareArray[rightmost - 1, topmost + 1].isRed() && !squareArray[rightmost, topmost].isOccupied())
+                    {
+                        topRight = squareArray[rightmost, topmost];
+                    }
+                }
+
+                if (leftmost >= 0 && bottommost <= 9)
+                {
+                    if (squareArray[leftmost + 1, bottommost - 1].isOccupied() && squareArray[leftmost + 1, bottommost - 1].isRed() && !squareArray[leftmost, bottommost].isOccupied())
+                    {
+                        bottomLeft = squareArray[leftmost, bottommost];
+                    }
+                }
+
+                if (rightmost <= 9 && bottommost <= 9)
+                {
+                    if (squareArray[rightmost - 1, bottommost - 1].isOccupied() && squareArray[rightmost - 1, bottommost - 1].isRed() && !squareArray[rightmost, bottommost].isOccupied())
+                    {
+                        bottomRight = squareArray[rightmost, bottommost];
+                    }
+                }
+            }
+
+            if (topLeft == null && topRight == null && bottomLeft == null && bottomRight == null)
+            {
+                topLeft = null;
+                topRight = null;
+                bottomLeft = null;
+                bottomRight = null;
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         private void checkers_Load(object sender, EventArgs e)  //REQUIRED
         {
 
@@ -840,17 +1145,12 @@ namespace Checkers
             {
                 blackTurn = false;
                 Turncounter.Text = "RED";
-                //MessageBox.Show("Red's turn");
             }
             else
             {
                 blackTurn = true;
                 Turncounter.Text = "BLACK";
-                //MessageBox.Show("Black's turn");
             }
-
-            firstClick = null;
-            secondClick = null;
         }
 
         public void winner(string colour)

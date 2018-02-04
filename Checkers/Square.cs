@@ -48,8 +48,8 @@ namespace Checkers
         }
 
         public void setOccupied(bool x)
-        {/*
-            if (x)
+        {
+            /*if (x)
             {
                 if (isRed())
                 {
@@ -62,11 +62,19 @@ namespace Checkers
             }
             else
             {
-                this.BackColor = Color.DarkSlateGray;
-                MessageBox.Show("Reached here");
+                this.BackgroundImage = Properties.Resources.Greyback;
             }*/
 
             occupied = x;
+
+            if (isKing() && isRed())
+            {
+                this.BackgroundImage = Properties.Resources.Red_King;
+            }
+            else if (isKing() && !isRed())
+            {
+                this.BackgroundImage = Properties.Resources.Black_King;
+            }
         }
 
         public void setRed(bool x)
@@ -109,11 +117,19 @@ namespace Checkers
 
         public void setCurrent()
         {
-            if (isRed() && isOccupied())
+            if (isRed() && isOccupied() && isKing())
+            {
+                this.BackgroundImage = Properties.Resources.Red_King_Selected;
+            }
+            else if (!isRed() && isOccupied() && isKing())
+            {
+                this.BackgroundImage = Properties.Resources.Black_King_Selected;
+            }
+            else if (isRed() && isOccupied() && !isKing())
             {
                 this.BackgroundImage = Properties.Resources.Red_Checker_Selected;
             }
-            else if (!isRed() && isOccupied())
+            else if (!isRed() && isOccupied() && !isKing())
             {
                 this.BackgroundImage = Properties.Resources.Black_Checker_Selected;
             }
@@ -121,13 +137,21 @@ namespace Checkers
 
         public void removeCurrent()
         {
-            if (!isRed() && isOccupied())
+            if (!isRed() && isOccupied() && !isKing())
             {
                 this.BackgroundImage = Properties.Resources.Black_Checker;
             }
-            else 
+            else if (isRed() && isOccupied() && !isKing())
             {
                 this.BackgroundImage = Properties.Resources.Red_Checker;
+            }
+            else if (!isRed() && isOccupied() && isKing())
+            {
+                this.BackgroundImage = Properties.Resources.Black_King;
+            }
+            else if (isRed() && isOccupied() && isKing())
+            {
+                this.BackgroundImage = Properties.Resources.Red_King;
             }
         }
     }

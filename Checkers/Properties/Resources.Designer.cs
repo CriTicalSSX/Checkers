@@ -83,6 +83,26 @@ namespace Checkers.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Black_King {
+            get {
+                object obj = ResourceManager.GetObject("Black_King", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Black_King_Selected {
+            get {
+                object obj = ResourceManager.GetObject("Black_King_Selected", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Greyback {
             get {
                 object obj = ResourceManager.GetObject("Greyback", resourceCulture);
@@ -106,6 +126,26 @@ namespace Checkers.Properties {
         internal static System.Drawing.Bitmap Red_Checker_Selected {
             get {
                 object obj = ResourceManager.GetObject("Red_Checker_Selected", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Red_King {
+            get {
+                object obj = ResourceManager.GetObject("Red_King", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Red_King_Selected {
+            get {
+                object obj = ResourceManager.GetObject("Red_King_Selected", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

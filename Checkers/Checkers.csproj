@@ -83,28 +83,34 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Black Checker Selected.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Black Checker.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Red Checker Selected.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Red Checker.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Left.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Left1.bmp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Redback.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Greyback.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Black King Selected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Black Checker Selected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Black King.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Red Checker Selected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Red King Selected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Red King.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
