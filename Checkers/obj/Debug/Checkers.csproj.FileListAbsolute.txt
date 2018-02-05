@@ -55,3 +55,5 @@ C:\Users\samgl\Desktop\Checkers-master\Checkers\obj\Debug\Checkers.Menu.resource
 C:\Users\samgl\Desktop\Checkers-master\Checkers\obj\Debug\Checkers.Properties.Resources.resources
 C:\Users\samgl\Desktop\Checkers-master\Checkers\obj\Debug\Checkers.csproj.GenerateResource.Cache
 C:\Users\samgl\Desktop\Checkers-master\Checkers\obj\Debug\Checkers.csproj.CoreCompileInputs.cache
+C:\Users\samgl\OneDrive\Documents\Schoolwork\Computer Systems 2B\Checkers\Checkers\obj\Debug\Checkers.Instructions.resources
+C:\Users\samgl\OneDrive\Documents\Schoolwork\Computer Systems 2B\Checkers\Checkers\obj\Debug\Checkers.Menu.resources

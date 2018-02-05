@@ -24,5 +24,9 @@
         private System.Windows.Forms.Button AboutBTN;
         private System.Windows.Forms.Button QuitBTN;
         private System.Windows.Forms.Label TitleLBL;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
     }
 }

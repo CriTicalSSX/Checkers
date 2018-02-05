@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -98,7 +97,7 @@ namespace Checkers
                 {
                     if (continueMoving)
                     {
-                        if (secondClick == topLeft || secondClick == topRight || secondClick == bottomLeft || secondClick == bottomRight && secondClick != null)
+                        if (secondClick == topLeft || secondClick == topRight || secondClick == bottomLeft || secondClick == bottomRight)
                         {
                             Square taken;
                             if (secondClick == topLeft)
@@ -118,7 +117,7 @@ namespace Checkers
                                 taken = squareArray[secondClick.getX() - 1, secondClick.getY() - 1];
                             }
 
-                            if (firstClick.isKing())
+                            /*if (firstClick.isKing())
                             {
                                 secondClick.BackgroundImage = Properties.Resources.Black_King;
                                 secondClick.setKing(true);
@@ -126,32 +125,26 @@ namespace Checkers
                             else
                             {
                                 secondClick.BackgroundImage = Properties.Resources.Black_Checker;
-                            }
+                            }*/
 
                             secondClick.setKing(firstClick.isKing());
                             secondClick.setRed(false);
                             secondClick.setOccupied(true);
-                            firstClick.removeCurrent();
                             secondClick.setCurrent();
+                            firstClick.removeCurrent();                            
                             firstClick.setOccupied(false);
                             firstClick.setKing(false);
                             firstClick.BackgroundImage = Properties.Resources.Greyback;
                             taken.BackgroundImage = Properties.Resources.Greyback;
                             taken.setOccupied(false);
                             taken.setKing(false);
-                            redCountersRemaining--;
-                            Redtakencounter.Text = Convert.ToString(redCountersRemaining);
-                            pieceTaken = true;
 
-                            if (redCountersRemaining == 0)
-                            {
-                                winner("Black");
-                            }
+                            takeCounter("red");
 
                             if (canStillMove("black"))
                             {
                                 firstClick = secondClick;
-                                firstClick.setKing(secondClick.isKing());
+                                //firstClick.setKing(secondClick.isKing());
                                 firstClick.setCurrent();
                                 secondClick = null;
                                 continueMoving = true;
@@ -159,10 +152,12 @@ namespace Checkers
                             else
                             {
                                 continueMoving = false;
-                                if (secondClick != null)
+
+                                /*if (secondClick != null)
                                 {
                                     secondClick.removeCurrent();
-                                }
+                                }*/
+
                                 pieceTaken = false;
                                 turnEnd = true;
                             }
@@ -175,7 +170,7 @@ namespace Checkers
                             if (canKingMove("black"))
                             {
                                 secondClick.setKing(true);
-                                secondClick.BackgroundImage = Properties.Resources.Black_King;
+                                //secondClick.BackgroundImage = Properties.Resources.Black_King;
                                 secondClick.setRed(false);
                                 secondClick.setOccupied(true);
                                 secondClick.setCurrent();
@@ -195,10 +190,10 @@ namespace Checkers
                                 {
                                     continueMoving = false;
 
-                                    if (secondClick != null)
+                                    /*if (secondClick != null)
                                     {
                                         secondClick.removeCurrent();
-                                    }
+                                    }*/
 
                                     pieceTaken = false;
                                     turnEnd = true;
@@ -214,20 +209,18 @@ namespace Checkers
                         {
                             if (canBlackMove())
                             {
-                                secondClick.BackgroundImage = Properties.Resources.Black_Checker;
-                                square.BackColor = Color.DarkSlateGray;
-                                secondClick.setKing(square.isKing());
+                                //secondClick.BackgroundImage = Properties.Resources.Black_Checker;
+                                secondClick.setKing(firstClick.isKing());
                                 secondClick.setRed(false);
-                                square.setOccupied(false);
-                                square.setKing(false);
                                 secondClick.setOccupied(true);
+                                secondClick.setCurrent();
                                 firstClick.removeCurrent();
                                 firstClick.setOccupied(false);
                                 firstClick.BackgroundImage = Properties.Resources.Greyback;
 
                                 if (secondClick.getY() == 0)
                                 {
-                                    MessageBox.Show("Kinged!");
+                                    //MessageBox.Show("Kinged!");
                                     secondClick.setKing(true);
                                     kinged = true;
                                 }
@@ -243,10 +236,10 @@ namespace Checkers
                                 else
                                 {
                                     continueMoving = false;
-                                    if (secondClick != null)
+                                    /*if (secondClick != null)
                                     {
                                         secondClick.removeCurrent();
-                                    }
+                                    }*/
                                     pieceTaken = false;
                                     turnEnd = true;
                                 }
@@ -260,7 +253,7 @@ namespace Checkers
                         if (nomove)
                         {
                             MessageBox.Show("Cannot make this move.");
-                            firstClick.removeCurrent();
+                            //firstClick.removeCurrent();
                         }
                     }
                 }
@@ -270,19 +263,8 @@ namespace Checkers
                 {
                     if (continueMoving)
                     {
-                        if (secondClick == topLeft || secondClick == topRight || secondClick == bottomLeft || secondClick == bottomRight && secondClick != null)
+                        if (secondClick == topLeft || secondClick == topRight || secondClick == bottomLeft || secondClick == bottomRight)
                         {
-                            if (firstClick.isKing())
-                            {
-                                secondClick.BackgroundImage = Properties.Resources.Red_King;
-                                secondClick.setKing(true);
-                            }
-                            else
-                            {
-                                secondClick.BackgroundImage = Properties.Resources.Red_Checker;
-                                secondClick.setKing(false);
-                            }
-
                             Square taken;
                             if (secondClick == topLeft)
                             {
@@ -307,18 +289,13 @@ namespace Checkers
                             secondClick.setCurrent();
                             firstClick.removeCurrent();
                             firstClick.setOccupied(false);
+                            firstClick.setKing(false);
                             firstClick.BackgroundImage = Properties.Resources.Greyback;
                             taken.BackgroundImage = Properties.Resources.Greyback;
                             taken.setOccupied(false);
                             taken.setKing(false);
-                            blackCountersRemaining--;
-                            Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
-                            pieceTaken = true;
 
-                            if (blackCountersRemaining == 0)
-                            {
-                                winner("Red");
-                            }
+                            takeCounter("black");
 
                             if (canStillMove("red"))
                             {
@@ -331,10 +308,10 @@ namespace Checkers
                             else
                             {
                                 continueMoving = false;
-                                if (secondClick != null)
+                                /*if (secondClick != null)
                                 {
                                     secondClick.removeCurrent();
-                                }
+                                }*/
                                 pieceTaken = false;
                                 turnEnd = true;
                             }
@@ -346,12 +323,9 @@ namespace Checkers
                         {
                             if (canKingMove("red"))
                             {
-                                secondClick.BackgroundImage = Properties.Resources.Red_King;
-                                square.BackColor = Color.DarkSlateGray;
-                                secondClick.setKing(square.isKing());
+                                //secondClick.BackgroundImage = Properties.Resources.Red_King;
+                                secondClick.setKing(firstClick.isKing());
                                 secondClick.setRed(true);
-                                square.setOccupied(false);
-                                square.setKing(false);
                                 secondClick.setOccupied(true);
                                 secondClick.setKing(true);
                                 firstClick.setKing(false);
@@ -370,10 +344,10 @@ namespace Checkers
                                 else
                                 {
                                     continueMoving = false;
-                                    if (secondClick != null)
+                                    /*if (secondClick != null)
                                     {
                                         secondClick.removeCurrent();
-                                    }
+                                    }*/
                                     pieceTaken = false;
                                     turnEnd = true;
                                 }
@@ -383,12 +357,9 @@ namespace Checkers
                         {
                             if (canRedMove())
                             {
-                                secondClick.BackgroundImage = Properties.Resources.Red_Checker;
-                                square.BackColor = Color.DarkSlateGray;
-                                secondClick.setKing(square.isKing());
-                                secondClick.setRed(true);
-                                square.setOccupied(false);
-                                square.setKing(false);
+                                //secondClick.BackgroundImage = Properties.Resources.Red_Checker;
+                                secondClick.setKing(firstClick.isKing());
+                                secondClick.setRed(firstClick.isRed());
                                 secondClick.setOccupied(true);
                                 firstClick.removeCurrent();
                                 firstClick.setOccupied(false);
@@ -411,10 +382,10 @@ namespace Checkers
                                 else
                                 {
                                     continueMoving = false;
-                                    if (secondClick != null)
+                                    /*if (secondClick != null)
                                     {
                                         secondClick.removeCurrent();
-                                    }
+                                    }*/
                                     pieceTaken = false;
                                     turnEnd = true;
                                 }
@@ -535,15 +506,8 @@ namespace Checkers
                         leftCounterToRemove.setOccupied(false);
                         leftCounterToRemove.setKing(false);
                         leftCounterToRemove.BackgroundImage = Properties.Resources.Greyback;
-                        leftCounterToRemove = null;
-                        redCountersRemaining--;
-                        Redtakencounter.Text = Convert.ToString(redCountersRemaining);
-                        pieceTaken = true;
 
-                        if (redCountersRemaining == 0)
-                        {
-                            winner("Black");
-                        }
+                        takeCounter("red");
                     }
 
                     return true;
@@ -555,15 +519,8 @@ namespace Checkers
                         rightCounterToRemove.setOccupied(false);
                         rightCounterToRemove.setKing(false);
                         rightCounterToRemove.BackgroundImage = Properties.Resources.Greyback;
-                        rightCounterToRemove = null;
-                        redCountersRemaining--;
-                        Redtakencounter.Text = Convert.ToString(redCountersRemaining);
-                        pieceTaken = true;
 
-                        if (redCountersRemaining == 0)
-                        {
-                            winner("Black");
-                        }
+                        takeCounter("red");
                     }
 
                     return true;
@@ -655,15 +612,8 @@ namespace Checkers
                         leftCounterToRemove.setOccupied(false);
                         leftCounterToRemove.setKing(false);
                         leftCounterToRemove.BackgroundImage = Properties.Resources.Greyback;
-                        leftCounterToRemove = null;
-                        blackCountersRemaining--;
-                        Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
-                        pieceTaken = true;
 
-                        if (blackCountersRemaining == 0)
-                        {
-                            winner("Red");
-                        }
+                        takeCounter("black");
                     }
 
                     return true;
@@ -675,15 +625,8 @@ namespace Checkers
                         rightCounterToRemove.setOccupied(false);
                         rightCounterToRemove.setKing(false);
                         rightCounterToRemove.BackgroundImage = Properties.Resources.Greyback;
-                        rightCounterToRemove = null;
-                        blackCountersRemaining--;
-                        Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
-                        pieceTaken = true;
 
-                        if (blackCountersRemaining == 0)
-                        {
-                            winner("Red");
-                        }
+                        takeCounter("black");
                     }
 
                     return true;
@@ -876,27 +819,15 @@ namespace Checkers
                         topLeftToRemove.setOccupied(false);
                         topLeftToRemove.setKing(false);
                         topLeftToRemove.BackgroundImage = Properties.Resources.Greyback;
-                        topLeftToRemove = null;
                         pieceTaken = true;
 
                         if (colour == "black")
                         {
-                            redCountersRemaining--;
-                            Redtakencounter.Text = Convert.ToString(redCountersRemaining);
+                            takeCounter("red");
                         }
                         else
                         {
-                            blackCountersRemaining--;
-                            Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
-                        }
-
-                        if (redCountersRemaining == 0)
-                        {
-                            winner("Black");
-                        }
-                        else if (blackCountersRemaining == 0)
-                        {
-                            winner("Red");
+                            takeCounter("black");
                         }
                     }
 
@@ -909,27 +840,15 @@ namespace Checkers
                         topRightToRemove.setOccupied(false);
                         topRightToRemove.setKing(false);
                         topRightToRemove.BackgroundImage = Properties.Resources.Greyback;
-                        topRightToRemove = null;
                         pieceTaken = true;
 
                         if (colour == "black")
                         {
-                            redCountersRemaining--;
-                            Redtakencounter.Text = Convert.ToString(redCountersRemaining);
+                            takeCounter("red");
                         }
                         else
                         {
-                            blackCountersRemaining--;
-                            Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
-                        }
-
-                        if (redCountersRemaining == 0)
-                        {
-                            winner("Black");
-                        }
-                        else if (blackCountersRemaining == 0)
-                        {
-                            winner("Red");
+                            takeCounter("black");
                         }
                     }
 
@@ -942,27 +861,15 @@ namespace Checkers
                         bottomLeftToRemove.setOccupied(false);
                         bottomLeftToRemove.setKing(false);
                         bottomLeftToRemove.BackgroundImage = Properties.Resources.Greyback;
-                        bottomLeftToRemove = null;
                         pieceTaken = true;
 
                         if (colour == "black")
                         {
-                            redCountersRemaining--;
-                            Redtakencounter.Text = Convert.ToString(redCountersRemaining);
+                            takeCounter("red");
                         }
                         else
                         {
-                            blackCountersRemaining--;
-                            Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
-                        }
-
-                        if (redCountersRemaining == 0)
-                        {
-                            winner("Black");
-                        }
-                        else if (blackCountersRemaining == 0)
-                        {
-                            winner("Red");
+                            takeCounter("black");
                         }
                     }
 
@@ -975,27 +882,15 @@ namespace Checkers
                         bottomRightToRemove.setOccupied(false);
                         bottomRightToRemove.setKing(false);
                         bottomRightToRemove.BackgroundImage = Properties.Resources.Greyback;
-                        bottomRightToRemove = null;
                         pieceTaken = true;
 
                         if (colour == "black")
                         {
-                            redCountersRemaining--;
-                            Redtakencounter.Text = Convert.ToString(redCountersRemaining);
+                            takeCounter("red");
                         }
                         else
                         {
-                            blackCountersRemaining--;
-                            Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
-                        }
-
-                        if (redCountersRemaining == 0)
-                        {
-                            winner("Black");
-                        }
-                        else if (blackCountersRemaining == 0)
-                        {
-                            winner("Red");
+                            takeCounter("black");
                         }
                     }
 
@@ -1112,14 +1007,14 @@ namespace Checkers
             }
         }
 
-        private void checkers_Load(object sender, EventArgs e)  //REQUIRED
+        /*private void checkers_Load(object sender, EventArgs e)  //REQUIRED
         {
 
-        }
+        }*/
 
         public void switchTurn()
         {
-            if (blackTurn == true)
+            if (blackTurn)
             {
                 blackTurn = false;
                 Turncounter.Text = "RED";
@@ -1131,9 +1026,30 @@ namespace Checkers
             }
         }
 
-        private void checkers_Load_1(object sender, EventArgs e)
+        public void takeCounter(string colour)
         {
+            if (colour == "red")
+            {
+                redCountersRemaining--;
+                Redtakencounter.Text = Convert.ToString(redCountersRemaining);
+                pieceTaken = true;
 
+                if (redCountersRemaining == 0)
+                {
+                    winner("Black");
+                }
+            }
+            else
+            {
+                blackCountersRemaining--;
+                Blacktakencounter.Text = Convert.ToString(blackCountersRemaining);
+                pieceTaken = true;
+
+                if (blackCountersRemaining == 0)
+                {
+                    winner("Red");
+                }
+            }
         }
 
         public void winner(string colour)
