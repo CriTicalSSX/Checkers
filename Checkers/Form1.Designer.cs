@@ -109,6 +109,7 @@
             this.Controls.Add(this.Turnlabel);
             this.Name = "checkers";
             this.Text = "Checkers";
+            this.Load += new System.EventHandler(this.checkers_Load_1);
             this.ResumeLayout(false);
             this.PerformLayout();
 

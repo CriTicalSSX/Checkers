@@ -44,11 +44,11 @@ namespace Checkers
 
                     if ((x % 2 == 0 && y % 2 == 0) || (x % 2 == 1 && y % 2 == 1))
                     {
-                        squareArray[x, y].BackColor = Color.Red;
+                        squareArray[x, y].BackgroundImage = Properties.Resources.Redback;
                     }
                     else
                     {
-                        squareArray[x, y].BackColor = Color.DarkSlateGray;
+                        squareArray[x, y].BackgroundImage = Properties.Resources.Greyback;
 
                         if (y >= 0 && y <= 3)
                         {
@@ -72,46 +72,24 @@ namespace Checkers
         void squareEvent_Click(object sender, EventArgs e)
         {
             Square square = sender as Square;
-          
+
             if (firstClick == null)
             {
-                if (blackTurn && square.BackColor != Color.Red && square.isOccupied() && !square.isRed())
+                if (blackTurn && square.isOccupied() && !square.isRed())
                 {
-                    square.setCurrent();
                     firstClick = square;
-                    
-                    if (firstClick.isKing())
-                    {
-                        firstClick.BackgroundImage = Properties.Resources.Black_King_Selected;
-                    }
-                    else
-                    {
-                        firstClick.BackgroundImage = Properties.Resources.Black_Checker_Selected;
-                    }
+                    firstClick.setCurrent();
                 }
-                else if (!blackTurn && square.BackColor != Color.Red && square.isOccupied() && square.isRed())
+                else if (!blackTurn && square.isOccupied() && square.isRed())
                 {
-                    square.setCurrent();
                     firstClick = square;
-
-                    if (firstClick.isKing())
-                    {
-                        firstClick.BackgroundImage = Properties.Resources.Red_King_Selected;
-                    }
-                    else
-                    {
-                        firstClick.BackgroundImage = Properties.Resources.Red_Checker_Selected;
-                    }
-                }
-                else
-                {
-                    
+                    firstClick.setCurrent();
                 }
             }
             else
             {
                 secondClick = square;
-                bool moved = false;
+                bool turnEnd = false;
                 bool nomove = false;
                 bool kinged = false;
 
@@ -149,7 +127,7 @@ namespace Checkers
                             {
                                 secondClick.BackgroundImage = Properties.Resources.Black_Checker;
                             }
-                            
+
                             secondClick.setKing(firstClick.isKing());
                             secondClick.setRed(false);
                             secondClick.setOccupied(true);
@@ -164,7 +142,7 @@ namespace Checkers
                             redCountersRemaining--;
                             Redtakencounter.Text = Convert.ToString(redCountersRemaining);
                             pieceTaken = true;
-                            
+
                             if (redCountersRemaining == 0)
                             {
                                 winner("Black");
@@ -186,7 +164,7 @@ namespace Checkers
                                     secondClick.removeCurrent();
                                 }
                                 pieceTaken = false;
-                                moved = true;
+                                turnEnd = true;
                             }
                         }
                     }
@@ -199,7 +177,7 @@ namespace Checkers
                                 secondClick.setKing(true);
                                 secondClick.BackgroundImage = Properties.Resources.Black_King;
                                 secondClick.setRed(false);
-                                secondClick.setOccupied(true); 
+                                secondClick.setOccupied(true);
                                 secondClick.setCurrent();
                                 firstClick.setKing(false);
                                 firstClick.removeCurrent();
@@ -215,7 +193,6 @@ namespace Checkers
                                 }
                                 else
                                 {
-                                    MessageBox.Show("Finished");
                                     continueMoving = false;
 
                                     if (secondClick != null)
@@ -224,7 +201,7 @@ namespace Checkers
                                     }
 
                                     pieceTaken = false;
-                                    moved = true;
+                                    turnEnd = true;
                                 }
                             }
                             else
@@ -250,6 +227,7 @@ namespace Checkers
 
                                 if (secondClick.getY() == 0)
                                 {
+                                    MessageBox.Show("Kinged!");
                                     secondClick.setKing(true);
                                     kinged = true;
                                 }
@@ -270,7 +248,7 @@ namespace Checkers
                                         secondClick.removeCurrent();
                                     }
                                     pieceTaken = false;
-                                    moved = true;
+                                    turnEnd = true;
                                 }
                             }
                             else
@@ -322,7 +300,7 @@ namespace Checkers
                             {
                                 taken = squareArray[secondClick.getX() - 1, secondClick.getY() - 1];
                             }
-                           
+
                             secondClick.setKing(firstClick.isKing());
                             secondClick.setRed(true);
                             secondClick.setOccupied(true);
@@ -346,7 +324,7 @@ namespace Checkers
                             {
                                 firstClick = secondClick;
                                 firstClick.setKing(secondClick.isKing());
-                                firstClick.setCurrent();                                
+                                firstClick.setCurrent();
                                 secondClick = null;
                                 continueMoving = true;
                             }
@@ -358,7 +336,7 @@ namespace Checkers
                                     secondClick.removeCurrent();
                                 }
                                 pieceTaken = false;
-                                moved = true;
+                                turnEnd = true;
                             }
                         }
                     }
@@ -385,7 +363,7 @@ namespace Checkers
                                 {
                                     firstClick = secondClick;
                                     firstClick.setKing(secondClick.isKing());
-                                    firstClick.setCurrent();                                   
+                                    firstClick.setCurrent();
                                     secondClick = null;
                                     continueMoving = true;
                                 }
@@ -397,7 +375,7 @@ namespace Checkers
                                         secondClick.removeCurrent();
                                     }
                                     pieceTaken = false;
-                                    moved = true;
+                                    turnEnd = true;
                                 }
                             }
                         }
@@ -426,7 +404,7 @@ namespace Checkers
                                 {
                                     firstClick = secondClick;
                                     firstClick.setKing(secondClick.isKing());
-                                    firstClick.setCurrent();                                   
+                                    firstClick.setCurrent();
                                     secondClick = null;
                                     continueMoving = true;
                                 }
@@ -438,7 +416,7 @@ namespace Checkers
                                         secondClick.removeCurrent();
                                     }
                                     pieceTaken = false;
-                                    moved = true;
+                                    turnEnd = true;
                                 }
                             }
                             else
@@ -470,7 +448,7 @@ namespace Checkers
                     secondClick = null;
                 }
 
-                if (moved)
+                if (turnEnd)
                 {
                     switchTurn();
                 }
@@ -1024,11 +1002,11 @@ namespace Checkers
                     return true;
                 }
                 else
-                {                   
+                {
                     return false;
                 }
             }
-        }     
+        }
 
         public bool canStillMove(string colour)
         {
@@ -1055,7 +1033,7 @@ namespace Checkers
             {
                 if (leftmost >= 0 && topmost >= 0)
                 {
-                    if (squareArray[leftmost+1, topmost+1].isOccupied() && !squareArray[leftmost+1, topmost+1].isRed() && !squareArray[leftmost, topmost].isOccupied())
+                    if (squareArray[leftmost + 1, topmost + 1].isOccupied() && !squareArray[leftmost + 1, topmost + 1].isRed() && !squareArray[leftmost, topmost].isOccupied())
                     {
                         topLeft = squareArray[leftmost, topmost];
                     }
@@ -1077,7 +1055,7 @@ namespace Checkers
                     }
                 }
 
-                if (rightmost <=9 && bottommost <= 9)
+                if (rightmost <= 9 && bottommost <= 9)
                 {
                     if (squareArray[rightmost - 1, bottommost - 1].isOccupied() && !squareArray[rightmost - 1, bottommost - 1].isRed() && !squareArray[rightmost, bottommost].isOccupied())
                     {
@@ -1153,11 +1131,25 @@ namespace Checkers
             }
         }
 
+        private void checkers_Load_1(object sender, EventArgs e)
+        {
+
+        }
+
         public void winner(string colour)
         {
             MessageBox.Show(colour + " wins!");
-            Close();
+            this.Hide();
+            new Menu().Show();
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                Application.Exit();
+            }
         }
     }
 }
-﻿

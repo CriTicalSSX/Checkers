@@ -16,7 +16,7 @@ namespace Checkers
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new checkers());
+            Application.Run(new Menu());
         }
     }
 }
