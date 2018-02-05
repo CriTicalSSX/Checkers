@@ -23,5 +23,6 @@
         private System.Windows.Forms.Button PlayBTN;
         private System.Windows.Forms.Button AboutBTN;
         private System.Windows.Forms.Button QuitBTN;
+        private System.Windows.Forms.Label TitleLBL;
     }
 }

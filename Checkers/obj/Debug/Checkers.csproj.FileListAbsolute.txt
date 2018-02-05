@@ -8,3 +8,13 @@ C:\Users\samgl\OneDrive\Documents\Schoolwork\Computer Systems 2B\Checkers\Checke
 C:\Users\samgl\OneDrive\Documents\Schoolwork\Computer Systems 2B\Checkers\Checkers\obj\Debug\Checkers.exe
 C:\Users\samgl\OneDrive\Documents\Schoolwork\Computer Systems 2B\Checkers\Checkers\obj\Debug\Checkers.pdb
 C:\Users\samgl\OneDrive\Documents\Schoolwork\Computer Systems 2B\Checkers\Checkers\obj\Debug\Checkers.checkers.resources
+C:\Users\abbaslawal\Documents\GitHub\Checkers\Checkers\bin\Debug\Checkers.exe.config
+C:\Users\abbaslawal\Documents\GitHub\Checkers\Checkers\bin\Debug\Checkers.exe
+C:\Users\abbaslawal\Documents\GitHub\Checkers\Checkers\bin\Debug\Checkers.pdb
+C:\Users\abbaslawal\Documents\GitHub\Checkers\Checkers\obj\Debug\Checkers.csprojResolveAssemblyReference.cache
+C:\Users\abbaslawal\Documents\GitHub\Checkers\Checkers\obj\Debug\Checkers.checkers.resources
+C:\Users\abbaslawal\Documents\GitHub\Checkers\Checkers\obj\Debug\Checkers.Properties.Resources.resources
+C:\Users\abbaslawal\Documents\GitHub\Checkers\Checkers\obj\Debug\Checkers.csproj.GenerateResource.Cache
+C:\Users\abbaslawal\Documents\GitHub\Checkers\Checkers\obj\Debug\Checkers.csproj.CoreCompileInputs.cache
+C:\Users\abbaslawal\Documents\GitHub\Checkers\Checkers\obj\Debug\Checkers.exe
+C:\Users\abbaslawal\Documents\GitHub\Checkers\Checkers\obj\Debug\Checkers.pdb
