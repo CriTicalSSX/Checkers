@@ -45,11 +45,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="Checkers.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Checkers.Designer.cs">
+      <DependentUpon>Checkers.cs</DependentUpon>
     </Compile>
     <Compile Include="Instructions.cs">
       <SubType>Form</SubType>
@@ -68,8 +68,8 @@
     <Compile Include="Square.cs">
       <SubType>Component</SubType>
     </Compile>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Checkers.resx">
+      <DependentUpon>Checkers.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Instructions.resx">
       <DependentUpon>Instructions.cs</DependentUpon>

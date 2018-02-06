@@ -143,22 +143,26 @@ namespace Checkers
 
         private void QuitBTN_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            Application.Exit();     //exits the program
         }
 
         private void PlayBTN_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            new checkers().Show();
+            this.Hide();                //hides menu while game in-play
+            new checkers().Show();      //creates new checkers board form
 
         }
 
         private void AboutBTN_Click(object sender, EventArgs e)
         {
             this.Hide();
-            new Instructions().Show();
+            new Instructions().Show();          //creates new instructions form
         }
 
+        /*
+         *  Used to ensure the program properly ends when the user presses the close button at the 
+         *  top right of the form
+        */
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
