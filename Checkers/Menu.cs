@@ -7,18 +7,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WMPLib;
 
 namespace Checkers
 {
     public partial class Menu : Form
     {
+        WindowsMediaPlayer player = new WindowsMediaPlayer();
         public Menu()
         {
             InitializeComponent();
+            player.URL = "gameMusic.wav";
         }
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Menu));
             this.PlayBTN = new System.Windows.Forms.Button();
             this.AboutBTN = new System.Windows.Forms.Button();
             this.QuitBTN = new System.Windows.Forms.Button();
@@ -27,6 +31,8 @@ namespace Checkers
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
+            ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
             this.SuspendLayout();
             // 
             // PlayBTN
@@ -123,10 +129,20 @@ namespace Checkers
             this.label4.TabIndex = 7;
             this.label4.Text = "  Abbas Lawal";
             // 
+            // axWindowsMediaPlayer1
+            // 
+            this.axWindowsMediaPlayer1.Enabled = true;
+            this.axWindowsMediaPlayer1.Location = new System.Drawing.Point(-1, 407);
+            this.axWindowsMediaPlayer1.Name = "axWindowsMediaPlayer1";
+            this.axWindowsMediaPlayer1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axWindowsMediaPlayer1.OcxState")));
+            this.axWindowsMediaPlayer1.Size = new System.Drawing.Size(10, 10);
+            this.axWindowsMediaPlayer1.TabIndex = 8;
+            // 
             // Menu
             // 
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.ClientSize = new System.Drawing.Size(475, 416);
+            this.Controls.Add(this.axWindowsMediaPlayer1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -136,6 +152,8 @@ namespace Checkers
             this.Controls.Add(this.AboutBTN);
             this.Controls.Add(this.PlayBTN);
             this.Name = "Menu";
+            this.Load += new System.EventHandler(this.Menu_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -170,6 +188,11 @@ namespace Checkers
             {
                 Application.Exit();
             }
+        }
+
+        private void Menu_Load(object sender, EventArgs e)
+        {
+            player.controls.play();
         }
     }
 }
